@@ -1,41 +1,59 @@
 "use client";
 
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import React, { useState } from "react";
-import { Toaster } from "~/components/ui/sonner";
-
 import { trpc } from "~/trpc/client";
 import { createTRPCHttpBatchClientClient } from "~/trpc/create-client";
+import { Toaster } from "react-hot-toast";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnMount: true,
-      staleTime: Infinity,
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 60 * 1000,
+        retry: (failureCount, error) => {
+          // Do not retry on 4xx errors
+          if (((error as unknown) as { data?: { httpStatus?: number } }).data?.httpStatus &&
+              ((error as unknown) as { data: { httpStatus: number } }).data.httpStatus < 500) return false;
+          return failureCount < 2;
+        },
+      },
     },
-  },
-});
+  });
+}
 
-export const GlobalProviders: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [trpcClient] = useState(() =>
-    trpc.createClient({
-      links: [createTRPCHttpBatchClientClient()],
-    }),
+let browserQueryClient: QueryClient | undefined;
+
+function getQueryClient() {
+  if (typeof window === "undefined") return makeQueryClient();
+  if (!browserQueryClient) browserQueryClient = makeQueryClient();
+  return browserQueryClient;
+}
+
+export function GlobalProviders({ children }: { children: React.ReactNode }) {
+  const queryClient = getQueryClient();
+  const [trpcClient] = React.useState(() =>
+    trpc.createClient({ links: [createTRPCHttpBatchClientClient()] })
   );
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <NextThemesProvider
-        attribute="class"
-        defaultTheme="light"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <trpc.Provider queryClient={queryClient} client={trpcClient}>
-          {children}
-          <Toaster />
-        </trpc.Provider>
-      </NextThemesProvider>
-    </QueryClientProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: "var(--background)",
+              color: "var(--foreground)",
+              border: "1px solid var(--border)",
+              borderRadius: "8px",
+              fontSize: "14px",
+            },
+          }}
+        />
+      </QueryClientProvider>
+    </trpc.Provider>
   );
-};
+}
