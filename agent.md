@@ -296,17 +296,21 @@ pnpm dev
 | Area | Status |
 |---|---|
 | Monorepo scaffolding | ✅ Complete |
-| Database schema (users) | ✅ Complete |
+| Database schema | ✅ Complete (users, forms, fields, responses, themes, subscriptions, payments) |
 | tRPC setup + OpenAPI | ✅ Complete |
-| Health endpoint | ✅ Complete |
-| Auth providers endpoint | ✅ Complete |
-| Google OAuth client | ✅ Configured |
+| Auth (better-auth) | ✅ Email/password + Google OAuth |
 | Logger | ✅ Complete |
-| Next.js frontend | 🟡 Scaffolded (basic home page only) |
+| Email package | ✅ Complete (welcome, form-confirmation templates) |
+| Next.js frontend | ✅ Phase 2 complete |
+| Landing page | ✅ Hero, Features, Themes, HowItWorks, SocialProof, CTA |
+| Auth pages | ✅ Login + Register with react-hook-form + Zod |
+| Dashboard | ✅ Layout (sidebar, header), Overview page |
+| Form builder | ✅ Zustand store, toolbar, field panel, canvas (dnd-kit), settings panel |
+| Public form filler | ✅ Typeform-style one-question-at-a-time with theme support |
+| Analytics | ✅ Recharts line chart, metric cards, completion rate |
+| Pricing page | ✅ 3-tier with Razorpay integration |
+| Explore page | ✅ Public form gallery with search + category filters |
 | shadcn/ui components | ✅ 53 components installed |
-| Authentication flow | 🔴 Not implemented (only provider listing) |
-| User CRUD | 🔴 Not implemented |
-| Frontend pages/features | 🔴 Not built |
 | Tests | 🔴 None |
 | CI/CD | 🔴 Not configured |
 | Production deployment | 🔴 Not configured |
@@ -340,12 +344,89 @@ pnpm dev
 ### Phase 1: TypeScript Error Cleanup (2026-05-24, late)
 - **Fixed `apps/api/src/env.ts`**: Added missing `FRONTEND_URL` property to the Zod env schema (default: `http://localhost:3000`), resolving TS2339 errors in `server.ts`.
 - **Fixed `apps/api/src/server.ts`**: Changed `generateOpenApiDocument` `tags` from `{name, description}[]` objects to `string[]` as required by `trpc-to-openapi` API, resolving 7 TS2322 errors.
-- **Fixed `packages/trpc`**: Added `@types/express-serve-static-core` and `@types/qs` as devDependencies to fix TS2742 ("inferred type cannot be named without a reference") on `protectedProcedure` and `proProcedure` exports.
+- **Fixed `packages/trpc`**: Added `@types/express-serve-static-core` and `@types/qs` as devDependencies to fix TS2742 (\"inferred type cannot be named without a reference\") on `protectedProcedure` and `proProcedure` exports.
 - **Fixed `packages/email`**: Created missing `tsconfig.json` with JSX support (`react-jsx`). Added `@types/node` and `@types/react` as devDependencies.
 - **Created `packages/email/src/templates/welcome.tsx`**: Welcome email template with FormCraft branding, CTA button to dashboard.
 - **Created `packages/email/src/templates/form-confirmation.tsx`**: Response confirmation email template for form respondents.
 - **Updated `packages/email/src/index.ts`**: Added exports for `welcome` and `form-confirmation` templates (previously referenced but missing).
 - **Result**: All 8 packages/apps (`database`, `schemas`, `trpc`, `email`, `services`, `logger`, `api`, `web`) pass `tsc --noEmit` with **zero TypeScript errors** and no `ts-ignore` directives.
+
+### Phase 2: Frontend Build (2026-05-25)
+
+**Dependencies added to `apps/web`:**
+`framer-motion`, `react-icons`, `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`, `zustand`, `immer`, `react-confetti`, `better-auth`, `qrcode.react`, `uuid`, `@types/uuid`
+
+**Design System (`globals.css`):**
+- Brand tokens (--brand-50 to --brand-900, primary #6C47FF)
+- Form filler CSS custom properties (--filler-bg, --filler-accent, --filler-text, etc.)
+- Utility classes: `.gradient-text`, `.hero-mesh`, `.card-lift`, `.builder-field-ghost`, `.filler-root`, `.filler-btn`, `.filler-progress-fill`
+- Dark mode support with oklch colors
+
+**Marketing Pages (Route group: `(marketing)`):**
+| File | Purpose |
+|---|---|
+| `app/(marketing)/layout.tsx` | Marketing layout wrapping nav + footer |
+| `app/(marketing)/page.tsx` | Landing page composing 6 sections |
+| `components/marketing/nav.tsx` | Sticky nav with auth-aware CTAs, mobile hamburger |
+| `components/marketing/hero.tsx` | Animated hero with mock browser preview |
+| `components/marketing/features.tsx` | 8 feature cards with scroll animations |
+| `components/marketing/themes.tsx` | Interactive theme selector with live preview |
+| `components/marketing/how-it-works.tsx` | 4-step timeline guide |
+| `components/marketing/social-proof.tsx` | Stats counters + 3 testimonial cards |
+| `components/marketing/cta.tsx` | Final CTA with gradient glow |
+| `components/marketing/footer.tsx` | Links, social icons, trust signals |
+| `app/(marketing)/pricing/page.tsx` | 3-tier pricing with Razorpay checkout |
+| `app/(marketing)/explore/page.tsx` | Public form gallery with search + category filters |
+
+**Auth Pages (Route group: `(auth)`):**
+| File | Purpose |
+|---|---|
+| `app/(auth)/layout.tsx` | Split-screen layout with branding panel |
+| `app/(auth)/auth/login/page.tsx` | Login with email/password, Google OAuth, demo credentials |
+| `app/(auth)/auth/register/page.tsx` | Register with password strength indicator |
+
+**Dashboard (Route group: `(dashboard)`):**
+| File | Purpose |
+|---|---|
+| `app/(dashboard)/layout.tsx` | Server-side auth guard, sidebar + header |
+| `components/dashboard/sidebar.tsx` | Navigation with user profile, sign out |
+| `components/dashboard/header.tsx` | Page title + "New form" CTA |
+| `app/(dashboard)/dashboard/page.tsx` | Overview: stat cards, recent forms list |
+| `app/(dashboard)/dashboard/forms/new/page.tsx` | Create form with react-hook-form + Zod |
+| `app/(dashboard)/dashboard/forms/[id]/edit/page.tsx` | Form builder page |
+| `app/(dashboard)/dashboard/forms/[id]/responses/page.tsx` | Analytics with recharts |
+
+**Form Builder:**
+| File | Purpose |
+|---|---|
+| `stores/form-builder.ts` | Zustand + immer store for builder state |
+| `components/builder/toolbar.tsx` | Publish/unpublish, share dialog, preview toggle |
+| `components/builder/field-type-panel.tsx` | 15 field types to add |
+| `components/builder/field-canvas.tsx` | Drag-and-drop sortable fields (dnd-kit) |
+| `components/builder/field-settings-panel.tsx` | Basic field editing (label, description, required) |
+| `components/builder/preview.tsx` | Non-interactive field preview |
+
+**Public Form Filler:**
+| File | Purpose |
+|---|---|
+| `app/f/[slug]/page.tsx` | Server component with SEO metadata |
+| `components/filler/form-filler-client.tsx` | Full Typeform-style experience with keyboard nav |
+| `components/filler/filler-question.tsx` | Renders all 15 field types |
+| `components/filler/filler-thank-you.tsx` | Confetti/fireworks animation |
+| `components/filler/filler-welcome-screen.tsx` | Welcome screen with start button |
+| `components/filler/filler-password-gate.tsx` | Password gate for protected forms |
+
+**Utilities:**
+| File | Purpose |
+|---|---|
+| `lib/auth-client.ts` | `better-auth/react` client with session hooks |
+| `lib/utils.ts` | `applyThemeToDom()`, `formatDuration()`, `getFormShareUrl()`, `truncate()` |
+
+**Configuration:**
+- Updated `next.config.js` with `transpilePackages`, `remotePatterns`, security headers
+- Removed old root `app/page.tsx` (replaced by marketing route group)
+
+**Icon Convention:** All custom components use `react-icons` exclusively (`ri`, `tb`, `si`, `md`, `fi`, `hi2`). No `lucide-react` imports in any custom code.
 
 ---
 
@@ -363,6 +444,14 @@ pnpm dev
 
 6. **Tailwind CSS v4** — Using the latest Tailwind with oklch color space and CSS custom properties.
 
+7. **Next.js Route Groups** — `(marketing)`, `(auth)`, `(dashboard)` route groups for layout isolation. Marketing has nav+footer, auth has split-screen, dashboard has sidebar+header.
+
+8. **Server-side auth guard** — Dashboard layout uses `auth.api.getSession({ headers: await headers() })` from `@repo/trpc/server` for server-component auth checks before rendering.
+
+9. **Zustand + Immer for builder state** — Form builder uses client-side state management with Zustand and Immer for immutable updates, separate from tRPC server state.
+
+10. **CSS custom properties for form filler theming** — Theme configs are applied at runtime via `applyThemeToDom()` setting `--filler-*` CSS variables, enabling each form to have its own visual identity without rebuilds.
+
 ---
 
 ### Runtime Bug Fixes (2026-05-24, late)
@@ -370,6 +459,19 @@ pnpm dev
 - **Fixed Express 5 wildcard routing**: Converted the `better-auth` mount path from `/auth/*` to `/auth/{*splat}` to satisfy the new `path-to-regexp` v8 syntax requirements.
 - **Fixed hanging auth requests**: Moved the `better-auth` mount point to be defined *before* any body parsing middleware (`express.json()`, `express.urlencoded()`) to prevent request body consumption issues.
 - **Fixed OpenAPI crashing dev server**: The `trpc-to-openapi` library crashed the server because it expected Zod output validators (`.output()`) on all endpoints containing `openApiMeta`. Wrapped `generateOpenApiDocument` and `createOpenApiExpressMiddleware` in try-catch blocks to degrade gracefully, allowing the main tRPC server and Next.js frontend to start successfully (`pnpm dev` now works, HTTP server running on PORT 8000).
+
+---
+
+## 13. What Comes in Phase 3
+
+- `FieldSettingsPanel` — Right panel for editing validation rules, options, placeholders, conditional logic
+- `BuilderPreview` — Live preview of the form in selected theme
+- QR code modal using `qrcode.react`
+- CSV export endpoint and download button
+- Form settings drawer (slug, visibility, response limit, expiry, password)
+- Admin seed script runner
+- `apps/web/app/(dashboard)/dashboard/forms/page.tsx` — Full forms list with filter/search
+- `apps/web/app/(dashboard)/dashboard/themes/page.tsx` — Theme gallery with preview
 
 ---
 
