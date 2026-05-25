@@ -1,6 +1,6 @@
 // apps/web/components/marketing/footer.tsx
 import Link from "next/link";
-import { RiFormLine, RiGithubLine, RiTwitterXLine } from "react-icons/ri";
+import { RiRamLine, RiGithubLine, RiTwitterXLine } from "react-icons/ri";
 
 const LINKS = {
   Product: [
@@ -26,7 +26,7 @@ export function MarketingFooter() {
           <div className="col-span-2 md:col-span-2">
             <Link href="/" className="flex items-center gap-2.5">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#6C47FF]">
-                <RiFormLine className="h-4 w-4 text-white" />
+                <RiRamLine className="h-5 w-5 text-white" />
               </div>
               <span className="text-base font-semibold text-white">FormCraft</span>
             </Link>

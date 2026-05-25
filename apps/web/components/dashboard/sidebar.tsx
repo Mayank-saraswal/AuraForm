@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "~/lib/utils";
 import { signOut } from "~/lib/auth-client";
 import {
-  RiDashboardLine, RiFormLine, RiSettings3Line,
+  RiDashboardLine, RiRamLine, RiSettings3Line,
   RiLogoutBoxLine, RiGlobalLine, RiPaletteLine,
 } from "react-icons/ri";
 import { TbForms, TbChartInfographic } from "react-icons/tb";
@@ -41,7 +41,7 @@ export function DashboardSidebar({ user }: SidebarProps) {
       {/* Logo */}
       <div className="flex h-[60px] items-center gap-2.5 border-b px-5">
         <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#6C47FF]">
-          <RiFormLine className="h-4 w-4 text-white" />
+          <RiRamLine className="h-4 w-4 text-white" />
         </div>
         <span className="text-sm font-semibold">FormCraft</span>
       </div>

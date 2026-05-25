@@ -1,7 +1,7 @@
 // apps/web/app/(dashboard)/dashboard/page.tsx
 "use client";
 import { trpc } from "~/trpc/client";
-import { RiFormLine, RiEyeLine, RiArrowRightLine, RiAddLine } from "react-icons/ri";
+import { RiRamLine, RiEyeLine, RiArrowRightLine, RiAddLine } from "react-icons/ri";
 import { TbChartInfographic } from "react-icons/tb";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -44,9 +44,9 @@ export default function DashboardOverviewPage() {
           Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)
         ) : (
           <>
-            <StatCard label="Total forms"        value={totalForms}     icon={RiFormLine}         color="#6C47FF" />
-            <StatCard label="Published forms"    value={publishedForms} icon={RiEyeLine}          color="#10B981" />
-            <StatCard label="Total responses"    value={totalResponses} icon={TbChartInfographic} color="#F59E0B" />
+            <StatCard label="Total forms" value={totalForms} icon={RiRamLine} color="#6C47FF" />
+            <StatCard label="Published forms" value={publishedForms} icon={RiEyeLine} color="#10B981" />
+            <StatCard label="Total responses" value={totalResponses} icon={TbChartInfographic} color="#F59E0B" />
           </>
         )}
       </div>
@@ -72,7 +72,7 @@ export default function DashboardOverviewPage() {
             : data?.forms.length === 0
             ? (
                 <div className="flex flex-col items-center gap-3 py-12 text-center">
-                  <RiFormLine className="h-10 w-10 text-muted-foreground/30" />
+                  <RiRamLine className="h-10 w-10 text-muted-foreground/30" />
                   <p className="text-sm text-muted-foreground">No forms yet.</p>
                   <Button asChild size="sm" className="bg-[#6C47FF]">
                     <Link href="/dashboard/forms/new"><RiAddLine className="mr-1.5 h-4 w-4" />Create your first form</Link>
@@ -82,7 +82,7 @@ export default function DashboardOverviewPage() {
             : data?.forms.map((form: { id: string; title: string; responseCount: number; status: string }) => (
                 <div key={form.id} className="flex items-center gap-4 border-t px-5 py-3.5 hover:bg-accent/40 transition-colors">
                   <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#6C47FF]/10">
-                    <RiFormLine className="h-4 w-4 text-[#6C47FF]" />
+                    <RiRamLine className="h-4 w-4 text-[#6C47FF]" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="truncate text-sm font-medium">{truncate(form.title, 50)}</p>

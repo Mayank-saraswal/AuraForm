@@ -92,7 +92,7 @@ export function FormFillerClient({ slug, password }: Props) {
     const formObj = form as { id: string } | null;
     if (!formObj) return;
 
-    const answersArr = Object.entries(answers).map(([fieldId, value]) => ({ fieldId, value }));
+    const answersArr = Object.entries(answers).map(([fieldId, value]) => ({ fieldId, value: value ?? null }));
 
     try {
       await submitMutation.mutateAsync({

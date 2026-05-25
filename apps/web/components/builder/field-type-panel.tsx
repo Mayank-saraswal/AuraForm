@@ -5,8 +5,8 @@ import { trpc } from "~/trpc/client";
 import toast from "react-hot-toast";
 import { RiText, RiFileTextLine, RiMailLine, RiHashtag,
          RiListCheck, RiCheckboxLine, RiStarLine, RiCalendarLine,
-         RiBarChartLine, RiToggleLine, RiPhoneLine, RiLinkLine,
-         RiImageLine, RiAlignLeftLine } from "react-icons/ri";
+         RiBarChartLine, RiToggleLine, RiPhoneLine, RiLinksLine,
+         RiImageLine, RiAlignLeft } from "react-icons/ri";
 
 type FieldType = "short_text" | "long_text" | "email" | "number" | "phone" | "url" |
   "single_select" | "multi_select" | "dropdown" | "checkbox" | "rating" | "scale" |
@@ -18,10 +18,10 @@ const FIELD_TYPES: { type: FieldType; label: string; icon: React.ElementType; de
   { type: "email",         label: "Email",          icon: RiMailLine,      desc: "Email address" },
   { type: "number",        label: "Number",         icon: RiHashtag,       desc: "Numeric answer" },
   { type: "phone",         label: "Phone",          icon: RiPhoneLine,     desc: "Phone number" },
-  { type: "url",           label: "Website URL",    icon: RiLinkLine,      desc: "Valid URL" },
+  { type: "url",           label: "Website URL",    icon: RiLinksLine,     desc: "Valid URL" },
   { type: "single_select", label: "Single select",  icon: RiListCheck,     desc: "Choose one option" },
   { type: "multi_select",  label: "Multi select",   icon: RiListCheck,     desc: "Choose many options" },
-  { type: "dropdown",      label: "Dropdown",       icon: RiAlignLeftLine, desc: "Dropdown list" },
+  { type: "dropdown",      label: "Dropdown",       icon: RiAlignLeft,     desc: "Dropdown list" },
   { type: "checkbox",      label: "Checkbox",       icon: RiCheckboxLine,  desc: "Yes / No tick" },
   { type: "rating",        label: "Rating",         icon: RiStarLine,      desc: "1 to 5 stars" },
   { type: "scale",         label: "NPS Scale",      icon: RiBarChartLine,  desc: "1 to 10 scale" },
@@ -36,9 +36,11 @@ export function FieldTypePanel({ formId }: { formId: string }) {
 
   const addFieldMutation = trpc.fields.add.useMutation({
     onSuccess: async (newField) => {
+      if (!newField) return;
       const builderField: BuilderField = {
         ...newField,
-        _localId: newField.id,
+        id: newField.id ?? "",
+        _localId: newField.id ?? "",
         formId: newField.formId ?? formId,
         type: newField.type ?? "short_text",
         label: newField.label ?? "",

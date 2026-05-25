@@ -11,7 +11,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { cn } from "~/lib/utils";
 import toast from "react-hot-toast";
-import { RiFormLine, RiDeleteBinLine } from "react-icons/ri";
+import { RiDraggable, RiSettings3Line, RiDeleteBinLine, RiRamLine } from "react-icons/ri";
 import { MdOutlineDragIndicator } from "react-icons/md";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
@@ -127,7 +127,7 @@ export function FieldCanvas({ formId }: { formId: string }) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/20">
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#6C47FF]/10">
-          <RiFormLine className="h-8 w-8 text-[#6C47FF]" />
+          <RiRamLine className="h-12 w-12 text-muted-foreground/20" />
         </div>
         <div className="text-center">
           <p className="text-sm font-semibold">No fields yet</p>

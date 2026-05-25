@@ -4,7 +4,7 @@ import { useState } from "react";
 import { trpc }       from "~/trpc/client";
 import Link           from "next/link";
 import { motion }     from "framer-motion";
-import { RiFormLine, RiSearchLine, RiArrowRightLine, RiEyeLine } from "react-icons/ri";
+import { RiRamLine, RiSearchLine, RiArrowRightLine, RiEyeLine } from "react-icons/ri";
 import { TbChartInfographic } from "react-icons/tb";
 import { Badge }      from "~/components/ui/badge";
 import { Input }      from "~/components/ui/input";
@@ -82,7 +82,7 @@ export default function ExplorePage() {
           </div>
         ) : forms.length === 0 ? (
           <div className="flex flex-col items-center gap-3 py-20 text-center">
-            <RiFormLine className="h-12 w-12 text-white/20" />
+            <RiRamLine className="h-12 w-12 text-white/20" />
             <p className="text-white/50">No public forms found.</p>
           </div>
         ) : (

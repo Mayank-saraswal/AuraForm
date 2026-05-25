@@ -1,6 +1,6 @@
 // apps/web/app/(auth)/layout.tsx
 import Link from "next/link";
-import { RiFormLine } from "react-icons/ri";
+import { RiRamLine } from "react-icons/ri";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="hero-mesh hidden flex-col items-start justify-between p-12 lg:flex">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#6C47FF]">
-            <RiFormLine className="h-4 w-4 text-white" />
+            <RiRamLine className="h-4 w-4 text-white" />
           </div>
           <span className="text-lg font-semibold text-white">FormCraft</span>
         </Link>
@@ -30,7 +30,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           {/* Mobile logo */}
           <Link href="/" className="mb-8 flex items-center gap-2.5 lg:hidden">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#6C47FF]">
-              <RiFormLine className="h-4 w-4 text-white" />
+              <RiRamLine className="h-4 w-4 text-white" />
             </div>
             <span className="text-base font-semibold">FormCraft</span>
           </Link>
