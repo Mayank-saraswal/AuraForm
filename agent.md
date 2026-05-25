@@ -460,18 +460,27 @@ pnpm dev
 - **Fixed hanging auth requests**: Moved the `better-auth` mount point to be defined *before* any body parsing middleware (`express.json()`, `express.urlencoded()`) to prevent request body consumption issues.
 - **Fixed OpenAPI crashing dev server**: The `trpc-to-openapi` library crashed the server because it expected Zod output validators (`.output()`) on all endpoints containing `openApiMeta`. Wrapped `generateOpenApiDocument` and `createOpenApiExpressMiddleware` in try-catch blocks to degrade gracefully, allowing the main tRPC server and Next.js frontend to start successfully (`pnpm dev` now works, HTTP server running on PORT 8000).
 
+### Phase 4: Integrations & Polish (2026-05-25)
+- **Email Infrastructure**: Installed `@react-email/render`, `@react-email/components`, and `resend`. Upgraded templates (`WelcomeEmail`, `ResponseNotificationEmail`, `FormConfirmationEmail`) with cinematic aesthetics.
+- **Resend Integration**: Wired `sendWelcomeEmail` into better-auth's `onUserCreated` database hook. Wired `sendResponseNotification` into the tRPC form response submission mutation (async, non-blocking).
+- **Database Seed Script**: Built a deterministic `db:seed` script in `packages/database/seed.ts` containing 13 themes, 1 demo user (`demo@formcraft.app`), 5 populated forms, and 400+ generated realistic responses. Added `db:seed` to `turbo.json`.
+- **API Documentation**: Upgraded Scalar / OpenAPI metadata in `apps/api/src/server.ts` with custom FormCraft branding, dark mode, rate limiting details, and demo credentials.
+- **Documentation**: Created a comprehensive, copy-paste ready `README.md` at the monorepo root and a `.env.example` with detailed environment variables layout.
+- **TypeScript**: Perfect type checking across all 10 packages using `pnpm check-types`.
+
 ---
 
-## 13. What Comes in Phase 3
+## 13. What Was Built in Phase 3
 
 - `FieldSettingsPanel` — Right panel for editing validation rules, options, placeholders, conditional logic
 - `BuilderPreview` — Live preview of the form in selected theme
 - QR code modal using `qrcode.react`
 - CSV export endpoint and download button
 - Form settings drawer (slug, visibility, response limit, expiry, password)
-- Admin seed script runner
+- Admin seed script runner (pending phase 4)
 - `apps/web/app/(dashboard)/dashboard/forms/page.tsx` — Full forms list with filter/search
 - `apps/web/app/(dashboard)/dashboard/themes/page.tsx` — Theme gallery with preview
+- MarketingFooter links wired correctly.
 
 ---
 

@@ -9,18 +9,20 @@ import { Input } from "~/components/ui/input";
 import toast from "react-hot-toast";
 import {
   RiEyeLine, RiEyeOffLine, RiLoader4Line, RiGlobalLine, RiLinkM,
-  RiShareLine, RiCheckLine, RiArrowLeftLine,
+  RiShareLine, RiCheckLine, RiArrowLeftLine, RiSettings3Line,
 } from "react-icons/ri";
 import Link from "next/link";
 import { getFormShareUrl } from "~/lib/utils";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "~/components/ui/dialog";
+import { FormSettingsDrawer } from "./form-settings-drawer";
 
 export function BuilderToolbar({ formId }: { formId: string }) {
   const { form, isDirty, previewMode, togglePreview } = useFormBuilder();
   const [shareOpen, setShareOpen] = useState(false);
   const [copied, setCopied]       = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const utils = trpc.useUtils();
 
   const publishMutation   = trpc.forms.publish.useMutation();
@@ -105,6 +107,11 @@ export function BuilderToolbar({ formId }: { formId: string }) {
           </Dialog>
         )}
 
+        <Button variant="ghost" size="sm" className="gap-1.5" onClick={() => setSettingsOpen(true)}>
+          <RiSettings3Line className="h-4 w-4" />
+          Settings
+        </Button>
+
         {isPublished ? (
           <Button
             variant="outline"
@@ -135,6 +142,7 @@ export function BuilderToolbar({ formId }: { formId: string }) {
           </Button>
         )}
       </div>
+      <FormSettingsDrawer formId={formId} open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, desc, count, avg, sql, gte, lte } from "drizzle-orm";
+import { eq, and, desc, asc, count, avg, sql, gte, lte } from "drizzle-orm";
 import { router, protectedProcedure, publicProcedure } from "../../trpc";
 import { db } from "@repo/database";
-import { formsTable, formFieldsTable, responsesTable, responseAnswersTable } from "@repo/database";
+import { formsTable, formFieldsTable, responsesTable, responseAnswersTable, usersTable } from "@repo/database";
 import {
   submitResponseSchema,
   listResponsesSchema,
@@ -11,6 +11,7 @@ import {
   paginationSchema,
 } from "@repo/schemas";
 import { openApiMeta } from "../../utils/path-generator";
+import { sendResponseNotification } from "@repo/email";
 import crypto from "node:crypto";
 
 function hashIp(ip: string): string {
@@ -108,7 +109,42 @@ export const responsesRouter = router({
 
       // Fire email notification async (non-blocking)
       if (form.notifyOnResponse) {
-        // notifyCreator(form, response).catch(console.error);
+        (async () => {
+          try {
+            // Get creator details
+            const creator = await db.query.usersTable.findFirst({
+              where: eq(usersTable.id, form.userId),
+              columns: { email: true, fullName: true },
+            });
+            if (!creator) return;
+
+            const notifyTo = form.notifyEmail ?? creator.email;
+
+            // Build answers preview for the email
+            const answersPreview = input.answers
+              .slice(0, 8)
+              .map((a) => {
+                const field = form.fields.find((f) => f.id === a.fieldId);
+                const val   = Array.isArray(a.value) ? a.value.join(", ") : String(a.value ?? "");
+                return { question: field?.label ?? "Question", answer: val };
+              });
+
+            await sendResponseNotification({
+              creatorEmail:   notifyTo,
+              creatorName:    creator.fullName,
+              formId:         form.id,
+              formTitle:      form.title,
+              responseCount:  form.responseCount + 1,
+              completionRate: form.viewCount > 0
+                ? Math.round(((form.responseCount + 1) / form.viewCount) * 100)
+                : 100,
+              answers: answersPreview,
+            });
+          } catch (emailErr) {
+            // Log but never crash the submission
+            console.error("Email notification failed:", emailErr);
+          }
+        })();
       }
 
       return { success: true, responseId: response!.id };
@@ -203,6 +239,70 @@ export const responsesRouter = router({
         avgTimeMs: completionStats?.avgTimeMs ? Math.round(Number(completionStats.avgTimeMs)) : null,
         dailyStats,
         fields: form.fields,
+      };
+    }),
+
+  exportCsv: protectedProcedure
+    .meta(openApiMeta("GET", "/responses/export/{id}", ["Responses"], true))
+    .input(uuidParamSchema)
+    .query(async ({ ctx, input }) => {
+      // Verify ownership
+      const form = await db.query.formsTable.findFirst({
+        where: and(eq(formsTable.id, input.id), eq(formsTable.userId, ctx.user.id)),
+        with: { fields: { orderBy: [asc(formFieldsTable.order)] } },
+      });
+      if (!form) throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+
+      const responses = await db.query.responsesTable.findMany({
+        where: eq(responsesTable.formId, input.id),
+        orderBy: [desc(responsesTable.submittedAt)],
+        with: { answers: true },
+        limit: 10000, // safety cap
+      });
+
+      // Build CSV header row from field labels
+      const headers = [
+        "Response ID",
+        "Submitted At",
+        "Time to Complete (s)",
+        ...form.fields.map((f) => f.label),
+      ];
+
+      // Build CSV rows
+      const rows = responses.map((r) => {
+        const answerMap = Object.fromEntries(
+          r.answers.map((a) => [a.fieldId, a.value])
+        );
+        return [
+          r.id,
+          r.submittedAt.toISOString(),
+          r.timeToCompleteMs != null ? Math.round(r.timeToCompleteMs / 1000) : "",
+          ...form.fields.map((f) => {
+            const val = answerMap[f.id];
+            if (val === null || val === undefined) return "";
+            if (Array.isArray(val)) return val.join("; ");
+            return String(val);
+          }),
+        ];
+      });
+
+      // Serialize to CSV string
+      function escapeCell(cell: string | number): string {
+        const s = String(cell);
+        if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+          return `"${s.replace(/"/g, '""')}"`;
+        }
+        return s;
+      }
+
+      const csvLines = [headers, ...rows].map((row) =>
+        row.map(escapeCell).join(",")
+      );
+
+      return {
+        csv: csvLines.join("\n"),
+        filename: `${form.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}_responses.csv`,
+        totalRows: responses.length,
       };
     }),
 });

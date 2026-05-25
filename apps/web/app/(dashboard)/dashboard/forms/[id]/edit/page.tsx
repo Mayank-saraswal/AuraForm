@@ -46,7 +46,7 @@ export default function FormBuilderPage() {
       <div className="flex flex-1 overflow-hidden">
         {!previewMode && <FieldTypePanel formId={id} />}
         <FieldCanvas formId={id} />
-        {!previewMode && <FieldSettingsPanel />}
+        {!previewMode && <FieldSettingsPanel formId={id} />}
         {previewMode && <BuilderPreview />}
       </div>
     </div>

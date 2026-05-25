@@ -1,5 +1,6 @@
 // apps/web/app/(dashboard)/dashboard/forms/[id]/responses/page.tsx
 "use client";
+import React from "react";
 import { useParams }   from "next/navigation";
 import { trpc }        from "~/trpc/client";
 import {
@@ -29,6 +30,37 @@ function MetricCard({ label, value, icon: Icon, color }: {
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function CsvExportButton({ formId }: { formId: string }) {
+  const [isExporting, setIsExporting] = React.useState(false);
+  const utils = trpc.useUtils();
+
+  async function handleExport() {
+    setIsExporting(true);
+    try {
+      const data = await utils.client.responses.exportCsv.query({ id: formId });
+      const blob = new Blob([data.csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = data.filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e: any) {
+      console.error(e);
+      alert(e.message || "Export failed.");
+    } finally {
+      setIsExporting(false);
+    }
+  }
+
+  return (
+    <Button variant="outline" size="sm" className="gap-1.5" onClick={handleExport} disabled={isExporting}>
+      <RiDownloadLine className="h-4 w-4" />
+      {isExporting ? "Exporting..." : "Export CSV"}
+    </Button>
   );
 }
 
@@ -69,10 +101,7 @@ export default function FormAnalyticsPage() {
           <h2 className="text-lg font-semibold">{form.title}</h2>
           <p className="text-sm text-muted-foreground">Response analytics and insights</p>
         </div>
-        <Button variant="outline" size="sm" className="gap-1.5">
-          <RiDownloadLine className="h-4 w-4" />
-          Export CSV
-        </Button>
+        <CsvExportButton formId={id} />
       </div>
 
       {/* Metric cards */}

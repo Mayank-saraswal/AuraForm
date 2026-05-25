@@ -8,7 +8,7 @@ const LINKS = {
     { label: "Themes",    href: "/#themes" },
     { label: "Pricing",   href: "/pricing" },
     { label: "Explore",   href: "/explore" },
-    { label: "API Docs",  href: "/api-docs" },
+    { label: "API Docs",  href: "http://localhost:8000/docs" },
   ],
   Company: [
     { label: "About",     href: "/about" },
@@ -35,11 +35,11 @@ export function MarketingFooter() {
               Powered by Razorpay, Resend, and Next.js.
             </p>
             <div className="mt-5 flex gap-3">
-              <a href="https://github.com" target="_blank" rel="noreferrer"
+              <a href="https://github.com/piyushgarg-dev/trpc-monorepo" target="_blank" rel="noreferrer"
                 className="text-white/40 hover:text-white transition-colors">
                 <RiGithubLine className="h-5 w-5" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer"
+              <a href="https://twitter.com/piyushgarg_dev" target="_blank" rel="noreferrer"
                 className="text-white/40 hover:text-white transition-colors">
                 <RiTwitterXLine className="h-5 w-5" />
               </a>

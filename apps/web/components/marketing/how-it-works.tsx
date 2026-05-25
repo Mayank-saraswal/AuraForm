@@ -36,49 +36,47 @@ const STEPS = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-[#050505] px-4 py-24">
-      <div className="mx-auto max-w-5xl">
-        <div className="mb-16 text-center">
-          <p className="mb-3 text-sm font-medium tracking-widest text-[#6C47FF] uppercase">
-            How it works
+    <section className="bg-[#050505] px-4 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-20 text-center">
+          <p className="mb-4 text-sm font-bold tracking-widest text-[#6C47FF] uppercase">
+            Built for speed
           </p>
-          <h2 className="text-4xl font-bold text-white sm:text-5xl">
-            Four steps to <span className="gradient-text">beautiful data</span>
+          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            From idea to insights in <span className="text-[#6C47FF]">minutes</span>.
           </h2>
         </div>
 
-        <div className="relative">
-          {/* Connecting line */}
-          <div className="absolute left-[23px] top-0 hidden h-full w-px bg-gradient-to-b from-[#6C47FF]/60 via-[#E50914]/40 to-[#F59E0B]/60 md:block" />
-
-          <div className="flex flex-col gap-12">
-            {STEPS.map((s, i) => (
-              <motion.div
-                key={s.step}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="flex items-start gap-6"
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+          {STEPS.map((s, i) => (
+            <motion.div
+              key={s.step}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="relative rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm"
+            >
+              {/* Connector line for desktop */}
+              {i < STEPS.length - 1 && (
+                <div className="hidden md:block absolute right-0 top-12 h-px w-8 translate-x-full bg-white/10" />
+              )}
+              
+              <div
+                className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl"
+                style={{ backgroundColor: s.color + "15", color: s.color }}
               >
-                <div
-                  className="relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl border border-white/10"
-                  style={{ background: s.color + "15" }}
-                >
-                  <s.icon className="h-5 w-5" style={{ color: s.color }} />
-                </div>
-                <div className="flex-1 pt-1">
-                  <div className="mb-1 flex items-center gap-3">
-                    <span className="text-xs font-bold tracking-widest" style={{ color: s.color }}>
-                      STEP {s.step}
-                    </span>
-                  </div>
-                  <h3 className="mb-2 text-xl font-bold text-white">{s.title}</h3>
-                  <p className="max-w-md text-sm leading-relaxed text-white/50">{s.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                <s.icon className="h-7 w-7" />
+              </div>
+              
+              <div className="mb-2 flex items-center gap-2">
+                <span className="text-sm font-bold opacity-50" style={{ color: s.color }}>STEP {s.step}</span>
+              </div>
+              
+              <h3 className="mb-3 text-xl font-bold text-white">{s.title}</h3>
+              <p className="text-sm leading-relaxed text-white/60">{s.desc}</p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

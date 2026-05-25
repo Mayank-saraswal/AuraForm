@@ -95,19 +95,65 @@ app.all("/auth/{*splat}", toNodeHandler(auth));
 let openApiDocument: ReturnType<typeof generateOpenApiDocument> | null = null;
 try {
   openApiDocument = generateOpenApiDocument(serverRouter, {
-    title: "FormCraft API",
-    version: "1.0.0",
-    description: "Industry-grade form builder API. Full OpenAPI 3.0 documentation.",
-    baseUrl: env.BASE_URL.concat("/api"),
+    title:       "FormCraft API",
+    version:     "1.0.0",
+    description: `
+## FormCraft — Industry-grade form builder API
+
+FormCraft provides a complete REST + tRPC API for creating, managing and
+analysing forms. This documentation covers all public and authenticated endpoints.
+
+### Authentication
+Protected endpoints require a valid session cookie obtained via the
+\`POST /auth/sign-in/email\` or \`POST /auth/sign-in/social\` endpoints.
+
+### Rate limiting
+- **Global**: 500 requests per IP per 15 minutes
+- **Form submission**: 20 submissions per IP per hour
+
+### Demo credentials
+- Email: \`demo@formcraft.app\`
+- Password: \`Demo1234!\`
+
+### Base URL (production)
+\`https://api.formcraft.app\`
+    `,
+    baseUrl:     (process.env["BASE_URL"] ?? "http://localhost:8000").concat("/api"),
+    docsUrl:     "/docs",
     tags: [
-      "Forms",
-      "Public Forms",
-      "Fields",
-      "Responses",
-      "Analytics",
-      "Themes",
-      "Payments",
+      {
+        name: "Forms",
+        description: "Form creation, management, and publishing.",
+      },
+      {
+        name: "Fields",
+        description: "Field management within forms.",
+      },
+      {
+        name: "Responses",
+        description: "Form response submission and retrieval.",
+      },
+      {
+        name: "Analytics",
+        description: "Form analytics and insights.",
+      },
+      {
+        name: "Themes",
+        description: "Form theme management.",
+      },
+      {
+        name: "Payments",
+        description: "Payment gateway integration for subscriptions.",
+      },
     ],
+    securitySchemes: {
+      sessionCookie: {
+        type: "apiKey",
+        in:   "cookie",
+        name: "formcraft.session_token",
+      },
+    },
+    security: [{ sessionCookie: [] }],
   });
 } catch (err) {
   logger.warn("OpenAPI document generation failed — /docs will be unavailable", { error: err });
@@ -115,7 +161,32 @@ try {
 
 if (openApiDocument) {
   app.get("/openapi.json", (req, res) => res.json(openApiDocument));
-  app.use("/docs", apiReference({ url: "/openapi.json", theme: "saturn" }));
+  app.use(
+    "/docs",
+    apiReference({
+      url:   "/openapi.json",
+      theme: "saturn",
+      configuration: {
+        title:      "FormCraft API Docs",
+        favicon:    "/favicon.ico",
+        darkMode:   true,
+        hideModels: false,
+        defaultHttpClient: {
+          targetKey:  "javascript",
+          clientKey:  "fetch",
+        },
+        customCss: `
+          .scalar-app { font-family: 'Inter', sans-serif; }
+          .section-hero { background: linear-gradient(135deg, #6C47FF22, #C026D322); }
+        `,
+        metaData: {
+          title:       "FormCraft API Documentation",
+          description: "Complete API reference for the FormCraft form builder platform",
+          ogTitle:     "FormCraft API",
+        },
+      },
+    })
+  );
 }
 
 // ── tRPC (main — all endpoints including public) ───────────────────────────────

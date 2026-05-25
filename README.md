@@ -1,135 +1,338 @@
-# Turborepo starter
+# FormCraft — Industry-grade Typeform Competitor
 
-This Turborepo starter is maintained by the Turborepo core team.
+Forms that feel like an experience. Built with Next.js 15, tRPC, Drizzle ORM,
+better-auth and Razorpay. Deployed on Vercel + Railway.
 
-## Using this example
+---
 
-Run the following command:
+## Live Demo
 
-```sh
-npx create-turbo@latest
-```
+| Resource            | URL                                              |
+|---------------------|--------------------------------------------------|
+| Web application     | https://formcraft.vercel.app                     |
+| API server          | https://api.formcraft.app                        |
+| API documentation   | https://api.formcraft.app/docs                   |
+| OpenAPI JSON        | https://api.formcraft.app/openapi.json           |
 
-## What's inside?
+### Demo credentials
 
-This Turborepo includes the following packages/apps:
+| Field    | Value                   |
+|----------|-------------------------|
+| Email    | `demo@formcraft.app`    |
+| Password | `Demo1234!`             |
 
-### Apps and Packages
+### Test payment credentials (Razorpay test mode)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+| Method    | Details                                              |
+|-----------|------------------------------------------------------|
+| Card      | `4111 1111 1111 1111` — any CVV — any future date   |
+| UPI       | `success@razorpay`                                   |
+| Netbanking| Select any bank — use test credentials               |
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+---
 
-### Utilities
+## What is FormCraft?
 
-This Turborepo has some additional tools already setup for you:
+FormCraft is an India-first, open-source Typeform competitor that makes
+form-filling feel like an experience. Key differentiators:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **Cinematic themes** — 20+ themes including Netflix, WhatsApp, Pink City Jaipur,
+  Anime Dark, Discord, macOS, Spotify and more
+- **One-question-at-a-time** — full-screen Typeform-style UX with keyboard navigation,
+  smooth framer-motion transitions and a progress bar
+- **India-first payments** — Razorpay integration for Pro (₹499/mo) and Team (₹1499/mo)
+  plans. UPI, cards and netbanking supported
+- **Real-time analytics** — completion rate, daily response chart, avg time,
+  per-question drop-off
+- **QR code sharing** — every published form gets a QR code you can download
+  or share via WhatsApp and Twitter
+- **CSV export** — one-click download of all responses as a spreadsheet
+- **Custom slugs** — `formcraft.app/f/your-brand-name`
+- **Email notifications** — Resend + React Email templates for creator alerts
+  and respondent confirmations
+- **Rate limiting + security** — IP hashing, honeypot bot trap, HMAC-verified
+  payments, Helmet security headers
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## Tech Stack
 
-```
-cd my-turborepo
+| Layer            | Technology                                                   |
+|------------------|--------------------------------------------------------------|
+| Monorepo         | Turborepo + pnpm workspaces                                  |
+| Frontend         | Next.js 15 (App Router) + React 19 + Tailwind CSS v4        |
+| Backend          | Express 5 + tRPC v11                                         |
+| Auth             | better-auth (email + Google OAuth)                           |
+| Database         | Drizzle ORM + Neon Postgres (serverless)                     |
+| Validation       | Zod v4 (shared schemas in `packages/schemas`)                |
+| Payments         | Razorpay (Indian gateway — UPI, cards, netbanking)           |
+| Email            | Resend + React Email                                         |
+| UI               | shadcn/ui (new-york) + react-icons + framer-motion           |
+| API Docs         | Scalar (OpenAPI 3.0)                                         |
+| Icons            | react-icons (Remix Icons, Tabler Icons, Simple Icons)        |
+| State            | Zustand + Immer (form builder) + TanStack Query              |
+| Drag and drop    | @dnd-kit/sortable                                            |
+| Charts           | Recharts                                                     |
+| QR codes         | qrcode.react                                                 |
+| Animations       | framer-motion + tw-animate-css                               |
+| Deployment       | Vercel (web) + Railway (API)                                 |
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## Architecture
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+formcraft/
+├── apps/
+│   ├── api/              ← Express + tRPC backend (port 8000)
+│   │   └── src/
+│   │       ├── env.ts
+│   │       ├── index.ts
+│   │       └── server.ts  ← Security middleware, rate limiting, Scalar docs
+│   └── web/              ← Next.js 15 App Router (port 3000)
+│       ├── app/
+│       │   ├── (marketing)/   ← Landing, pricing, explore pages
+│       │   ├── (auth)/        ← Login, register
+│       │   ├── (dashboard)/   ← Creator dashboard (protected)
+│       │   └── f/[slug]/      ← Public form filler (no auth)
+│       ├── components/
+│       │   ├── builder/       ← Form builder canvas, panels, preview
+│       │   ├── dashboard/     ← QR modal, forms list
+│       │   ├── filler/        ← Typeform-style filler components
+│       │   └── marketing/     ← Landing page sections
+│       └── stores/            ← Zustand stores (form builder state)
+└── packages/
+    ├── database/         ← Drizzle ORM schema, migrations, seed script
+    │   └── models/       ← users, forms, form_fields, responses, subscriptions
+    ├── trpc/             ← Shared tRPC router, context, auth
+    │   └── server/
+    │       ├── auth.ts        ← better-auth configuration
+    │       ├── context.ts     ← Request context with user session
+    │       ├── trpc.ts        ← publicProcedure, protectedProcedure, proProcedure
+    │       └── routes/        ← forms, fields, responses, themes, payments
+    ├── schemas/          ← Shared Zod schemas (used by API and web)
+    ├── email/            ← React Email templates + Resend senders
+    ├── services/         ← Google OAuth client
+    └── logger/           ← Shared logger
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+---
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Local Setup (5 minutes)
 
+### Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- A Neon Postgres database (free at neon.tech)
+- A Resend account (free at resend.com — 3000 emails/month)
+- A Razorpay test account (free at razorpay.com)
+- Google OAuth credentials (console.cloud.google.com)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/formcraft.git
+cd formcraft
+pnpm install
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+### 2. Configure environment variables
+
+Copy the example and fill in your values:
+
+```bash
+cp .env.example .env
 ```
 
-## Useful Links
+Open `.env` and fill in:
 
-Learn more about the power of Turborepo:
+```bash
+# Database
+DATABASE_URL="postgresql://user:pass@ep-xxx.neon.tech/formcraft?sslmode=require"
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+# App URLs
+PORT=8000
+NODE_ENV=development
+BASE_URL=http://localhost:8000
+FRONTEND_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000/trpc
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# better-auth (generate with: openssl rand -base64 32)
+BETTER_AUTH_SECRET="your-32-char-secret"
+BETTER_AUTH_URL=http://localhost:8000
+
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+# Security
+IP_HASH_SALT="your-random-salt"
+
+# Resend
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+RESEND_FROM_EMAIL="FormCraft <noreply@formcraft.app>"
+
+# Razorpay (use test keys)
+RAZORPAY_KEY_ID=rzp_test_xxxx
+RAZORPAY_KEY_SECRET=xxxx
+RAZORPAY_WEBHOOK_SECRET=xxxx
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxx
+```
+
+### 3. Run database migrations
+
+```bash
+pnpm db:generate   # generate migration files from schema
+pnpm db:migrate    # apply migrations to Neon
+```
+
+### 4. Seed demo data
+
+```bash
+pnpm db:seed
+```
+
+This creates:
+- Demo user: `demo@formcraft.app` / `Demo1234!` (Pro plan)
+- 13 predefined themes
+- 5 themed published forms (Netflix, Jaipur, Anime, Startup, Discord)
+- 247 realistic responses spread over the last 30 days
+
+### 5. Start the development servers
+
+```bash
+pnpm dev
+```
+
+Open:
+- Web: http://localhost:3000
+- API: http://localhost:8000
+- API docs: http://localhost:8000/docs
+
+---
+
+## Available Scripts
+
+| Command           | Description                              |
+|-------------------|------------------------------------------|
+| `pnpm dev`        | Start all apps in development mode       |
+| `pnpm build`      | Build all apps for production            |
+| `pnpm check-types`| TypeScript type check across all packages|
+| `pnpm lint`       | ESLint across all packages               |
+| `pnpm db:generate`| Generate Drizzle migration files         |
+| `pnpm db:migrate` | Apply migrations to database             |
+| `pnpm db:seed`    | Seed demo data                           |
+| `pnpm db:studio`  | Open Drizzle Studio GUI                  |
+
+---
+
+## API Documentation
+
+Full interactive API documentation is available at:
+
+**https://api.formcraft.app/docs**
+
+The API follows OpenAPI 3.0 specification. The raw spec is at:
+
+**https://api.formcraft.app/openapi.json**
+
+### Key endpoints
+
+| Method | Path                              | Auth     | Description                        |
+|--------|-----------------------------------|----------|------------------------------------|
+| POST   | `/api/forms`                      | Required | Create a new form                  |
+| GET    | `/api/forms`                      | Required | List all your forms (paginated)    |
+| GET    | `/api/forms/{id}`                 | Required | Get a form with all fields         |
+| PATCH  | `/api/forms/{id}`                 | Required | Update form settings               |
+| POST   | `/api/forms/{id}/publish`         | Required | Publish a form                     |
+| POST   | `/api/forms/{id}/unpublish`       | Required | Unpublish a form                   |
+| DELETE | `/api/forms/{id}`                 | Required | Delete a form                      |
+| POST   | `/api/fields`                     | Required | Add a field to a form              |
+| PATCH  | `/api/fields/{id}`                | Required | Update a field                     |
+| POST   | `/api/fields/reorder`             | Required | Reorder fields (drag-and-drop)     |
+| POST   | `/api/responses/submit`           | Public   | Submit a form response (rate-limited)|
+| GET    | `/api/responses`                  | Required | List responses for a form          |
+| GET    | `/api/responses/analytics/{id}`   | Required | Analytics for a form               |
+| GET    | `/api/responses/export/{id}`      | Required | Export responses as CSV            |
+| GET    | `/api/themes`                     | Public   | List all available themes          |
+| POST   | `/api/payments/create-order`      | Required | Create Razorpay order              |
+| POST   | `/api/payments/verify`            | Required | Verify and activate payment        |
+
+### Authentication
+
+All protected endpoints require a session cookie. Obtain it via:
+
+```bash
+curl -X POST https://api.formcraft.app/auth/sign-in/email \
+  -H "Content-Type: application/json" \
+  -d '{"email":"demo@formcraft.app","password":"Demo1234!"}'
+```
+
+The response sets a `formcraft.session_token` cookie automatically.
+
+---
+
+## Form Themes
+
+FormCraft ships with 13 built-in themes (8 free, 5 Pro-only):
+
+| Theme          | Category       | Pro |
+|----------------|----------------|-----|
+| Netflix        | Streaming      | No  |
+| WhatsApp       | Social         | No  |
+| Pink City Jaipur| Culture       | No  |
+| Anime Dark     | Anime          | No  |
+| Discord        | Gaming         | No  |
+| Startup        | Startup        | No  |
+| India Pride    | Culture        | No  |
+| YouTube        | Streaming      | No  |
+| Minimal Light  | Minimal        | No  |
+| macOS          | OS             | Yes |
+| Spotify        | Streaming      | Yes |
+| Cyberpunk      | Gaming         | Yes |
+| Windows 11     | OS             | Yes |
+
+---
+
+## Security
+
+- **Passwords**: bcrypt (cost factor 12)
+- **IP addresses**: SHA-256 HMAC hashed — raw IPs never stored
+- **Sessions**: better-auth secure HTTP-only cookies (30-day expiry)
+- **Payments**: Razorpay HMAC signature verification before any plan upgrade
+- **Bot protection**: honeypot field on all public form submissions
+- **Rate limiting**: 500 req/15min global, 20 submissions/hour per IP
+- **Headers**: Helmet CSP, X-Frame-Options, Referrer-Policy, HSTS
+- **CORS**: allowlist — only configured frontend origin
+
+---
+
+## Hackathon Submission
+
+This project was submitted to the tRPC Monorepo Hackathon 2024.
+
+**Required stack**: Turborepo, tRPC, Zod, Drizzle ORM, Scalar — all used.
+
+**Bonus features implemented**:
+- QR code sharing
+- CSV export
+- Custom form slugs
+- Form response limit and expiry
+- Password-protected forms
+- Public explore page
+- 13 form themes + theme gallery
+- Clone form
+- Razorpay payments
+- React Email notifications
+
+**GitHub**: https://github.com/your-username/formcraft
+**Demo**: https://formcraft.vercel.app
+**API Docs**: https://api.formcraft.app/docs
+
+---
+
+## License
+
+MIT — see LICENSE file for details.

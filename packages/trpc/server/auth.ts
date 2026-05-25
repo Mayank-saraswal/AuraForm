@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@repo/database";
+import { sendWelcomeEmail } from "@repo/email";
 import {
   usersTable,
   sessionsTable,
@@ -46,6 +47,23 @@ export const auth = betterAuth({
     },
   },
 
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          try {
+            await sendWelcomeEmail({
+              toEmail: user.email,
+              toName:  user.name ?? "there",
+            });
+          } catch {
+            // Never block registration on email failure
+          }
+        },
+      },
+    },
+  },
+
   trustedOrigins: [
     process.env["FRONTEND_URL"] ?? "http://localhost:3000",
   ],
@@ -57,7 +75,6 @@ export const auth = betterAuth({
   },
 
   advanced: {
-    generateId: () => crypto.randomUUID(),
     cookiePrefix: "formcraft",
   },
 });
