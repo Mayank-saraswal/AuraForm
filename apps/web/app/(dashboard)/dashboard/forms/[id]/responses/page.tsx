@@ -1,6 +1,6 @@
 // apps/web/app/(dashboard)/dashboard/forms/[id]/responses/page.tsx
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useParams }   from "next/navigation";
 import { trpc }        from "~/trpc/client";
 import {
@@ -13,6 +13,16 @@ import { Button }      from "~/components/ui/button";
 import { formatDuration } from "~/lib/utils";
 import { RiDownloadLine, RiBarChartLine, RiEyeLine, RiTimeLine } from "react-icons/ri";
 import { TbChartInfographic } from "react-icons/tb";
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  type ColumnDef,
+} from "@tanstack/react-table";
+import { format } from "date-fns";
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from "~/components/ui/table";
 
 function MetricCard({ label, value, icon: Icon, color }: {
   label: string; value: string | number; icon: React.ElementType; color: string;
@@ -177,6 +187,136 @@ export default function FormAnalyticsPage() {
           </p>
         </CardContent>
       </Card>
+
+      {/* Individual Responses Table */}
+      <ResponsesTable formId={id} />
     </div>
+  );
+}
+
+// ── Responses Table with Pagination ──────────────────────────────────────────
+function ResponsesTable({ formId }: { formId: string }) {
+  const [page, setPage] = useState(1);
+  const LIMIT = 20;
+
+  const { data, isLoading } = trpc.responses.list.useQuery({
+    formId,
+    page,
+    limit: LIMIT,
+  });
+
+  const responses = (data as { responses?: unknown[] } | undefined)?.responses ?? [];
+  const total = (data as { total?: number } | undefined)?.total ?? 0;
+
+  const columns: ColumnDef<Record<string, unknown>>[] = [
+    {
+      accessorKey: "submittedAt",
+      header:      "Submitted",
+      cell: ({ row }) => {
+        const val = row.original["submittedAt"];
+        if (!val) return "—";
+        return format(new Date(val as string), "dd MMM yyyy, hh:mm a");
+      },
+    },
+    {
+      accessorKey: "timeToCompleteMs",
+      header:      "Time",
+      cell: ({ row }) => {
+        const ms = row.original["timeToCompleteMs"] as number | null;
+        return ms ? formatDuration(ms) : "—";
+      },
+    },
+    {
+      id:     "answers",
+      header: "First answer",
+      cell:   ({ row }) => {
+        const answers = row.original["answers"] as Array<{ value: unknown }> | undefined;
+        const first = answers?.[0];
+        if (!first) return "—";
+        const val = first.value;
+        if (Array.isArray(val)) return val.join(", ");
+        return String(val ?? "—").slice(0, 60);
+      },
+    },
+  ];
+
+  const table = useReactTable({
+    data:             responses as Record<string, unknown>[],
+    columns,
+    getCoreRowModel:  getCoreRowModel(),
+    manualPagination: true,
+    rowCount:         total,
+  });
+
+  if (isLoading) return <Skeleton className="h-64 rounded-xl" />;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardTitle className="text-sm font-semibold">
+          Individual Responses ({total})
+        </CardTitle>
+        <CsvExportButton formId={formId} />
+      </CardHeader>
+      <CardContent className="p-0">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((hg) => (
+              <TableRow key={hg.id}>
+                {hg.headers.map((h) => (
+                  <TableHead key={h.id} className="text-xs">
+                    {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="py-10 text-center text-sm text-muted-foreground">
+                  No responses yet.
+                </TableCell>
+              </TableRow>
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id} className="text-sm">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+
+        {/* Pagination */}
+        {total > LIMIT && (
+          <div className="flex items-center justify-between border-t px-4 py-3">
+            <p className="text-xs text-muted-foreground">
+              Page {page} of {Math.ceil(total / LIMIT)}
+            </p>
+            <div className="flex gap-2">
+              <Button
+                variant="outline" size="sm"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline" size="sm"
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page >= Math.ceil(total / LIMIT)}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

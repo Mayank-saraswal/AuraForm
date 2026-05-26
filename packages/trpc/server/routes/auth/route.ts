@@ -11,7 +11,7 @@ export const authRouter = router({
   getSupportedAuthenticationProviders: publicProcedure
     .meta({ openapi: { method: "GET", path: getPath("/supported-providers"), tags: TAGS } })
     .input(zodUndefinedModel)
-    .output(z.readonly(z.array(getAuthenticationMethodOutputSchema)))
+    .output(z.array(getAuthenticationMethodOutputSchema).readonly())
     .query(async () => {
       const supportedMethods = await userService.getAuthenticationMethods();
       return supportedMethods;

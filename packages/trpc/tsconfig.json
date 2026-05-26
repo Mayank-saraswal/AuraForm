@@ -1,4 +1,10 @@
 {
-  "extends": ["@repo/typescript-config/node.json"],
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "jsx": "react-jsx"
+  },
   "include": ["server/", "client/"]
 }

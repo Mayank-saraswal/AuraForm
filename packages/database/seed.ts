@@ -1,12 +1,29 @@
 import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon }    from "@neondatabase/serverless";
 import { eq, sql } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import * as schema from "./schema";
 import { env } from "./env";
 
-// ── DB connection ─────────────────────────────────────────────────────────────
-const db = drizzle(env.DATABASE_URL, { schema });
+// ── DB connection (Neon serverless) ───────────────────────────────────────────
+const neonSql = neon(env.DATABASE_URL);
+const db = drizzle(neonSql, { schema });
+
+// ── Clean database before re-seeding ──────────────────────────────────────────
+async function cleanDatabase() {
+  console.log("Cleaning existing seed data...");
+  // Delete in reverse dependency order
+  await db.delete(schema.responseAnswersTable);
+  await db.delete(schema.responsesTable);
+  await db.delete(schema.formFieldsTable);
+  await db.delete(schema.formsTable);
+  await db.delete(schema.formThemesTable);
+  // Keep users — just delete the demo user
+  await db.delete(schema.usersTable)
+    .where(eq(schema.usersTable.email, "demo@formcraft.app"));
+  console.log("Database cleaned.\n");
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function randomBetween(min: number, max: number): number {
@@ -166,6 +183,9 @@ const THEMES = [
 async function seed() {
   console.log("Starting FormCraft seed...\n");
 
+  // Clean existing seed data first
+  await cleanDatabase();
+
   // ── 1. Seed themes ──────────────────────────────────────────────────────────
   console.log("Seeding themes...");
   const themeIdMap: Record<string, string> = {};
@@ -198,7 +218,7 @@ async function seed() {
 
   await db.insert(schema.usersTable).values({
     id:            demoUserId,
-    fullName:      "Demo Creator",
+    name:      "Demo Creator",
     email:         "demo@formcraft.app",
     emailVerified: true,
     passwordHash,
@@ -207,7 +227,7 @@ async function seed() {
 
   const demoUser = await db.query.usersTable.findFirst({
     where: eq(schema.usersTable.email, "demo@formcraft.app"),
-    columns: { id: true, fullName: true },
+    columns: { id: true, name: true },
   });
   const userId = demoUser!.id;
   console.log(`  Demo user ready: demo@formcraft.app / Demo1234!\n`);

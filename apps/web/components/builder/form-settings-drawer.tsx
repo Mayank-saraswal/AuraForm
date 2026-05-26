@@ -58,7 +58,7 @@ export function FormSettingsDrawer({ formId, open, onClose }: Props) {
     register, handleSubmit, reset, watch, setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormSettings>({
-    resolver: zodResolver(formSettingsSchema),
+    resolver: zodResolver(formSettingsSchema) as any,
   });
 
   useEffect(() => {

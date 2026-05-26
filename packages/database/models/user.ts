@@ -13,11 +13,12 @@ export const planEnum = pgEnum("plan", ["free", "pro", "team"]);
 export const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
 
-  fullName: varchar("full_name", { length: 80 }).notNull(),
+  name: varchar("full_name", { length: 80 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
-  passwordHash: text("password_hash"),           // null for OAuth-only users
-  profileImageUrl: text("profile_image_url"),
+  password: text("password"),                    // better-auth uses 'password'
+  passwordHash: text("password_hash"),           // legacy/custom usage
+  image: text("profile_image_url"),
   plan: planEnum("plan").default("free").notNull(),
 
   // better-auth required fields

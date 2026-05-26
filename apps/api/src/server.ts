@@ -30,21 +30,33 @@ app.use(
 );
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
-const allowedOrigins = [
+const ALLOWED_ORIGINS = [
   env.FRONTEND_URL ?? "http://localhost:3000",
   "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
 ];
+
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
+    origin(origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
     },
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-trpc-source"],
+    credentials:      true,           // REQUIRED for cookies
+    methods:          ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders:   [
+      "Content-Type", "Authorization", "x-trpc-source", "Cookie",
+    ],
+    exposedHeaders:   ["Set-Cookie"],
+    optionsSuccessStatus: 200,        // Some legacy browsers choke on 204
   })
 );
+
+// Explicitly handle OPTIONS preflight for all routes
+app.options(/.*/, cors());
 
 // ── Global rate limiter ───────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
@@ -89,7 +101,7 @@ app.get("/health", (req, res) => res.json({ status: "healthy", ts: Date.now() })
 
 // ── better-auth handler ───────────────────────────────────────────────────────
 // Express 5 requires named wildcards (path-to-regexp v8)
-app.all("/auth/{*splat}", toNodeHandler(auth));
+app.all("/api/auth/{*splat}", toNodeHandler(auth));
 
 // ── OpenAPI + Scalar docs ─────────────────────────────────────────────────────
 let openApiDocument: ReturnType<typeof generateOpenApiDocument> | null = null;
@@ -145,7 +157,7 @@ Protected endpoints require a valid session cookie obtained via the
         name: "Payments",
         description: "Payment gateway integration for subscriptions.",
       },
-    ],
+    ] as any,
     securitySchemes: {
       sessionCookie: {
         type: "apiKey",
@@ -153,7 +165,7 @@ Protected endpoints require a valid session cookie obtained via the
         name: "formcraft.session_token",
       },
     },
-    security: [{ sessionCookie: [] }],
+    
   });
 } catch (err) {
   logger.warn("OpenAPI document generation failed — /docs will be unavailable", { error: err });
@@ -164,28 +176,24 @@ if (openApiDocument) {
   app.use(
     "/docs",
     apiReference({
-      url:   "/openapi.json",
-      theme: "saturn",
-      configuration: {
-        title:      "FormCraft API Docs",
-        favicon:    "/favicon.ico",
-        darkMode:   true,
-        hideModels: false,
-        defaultHttpClient: {
-          targetKey:  "javascript",
-          clientKey:  "fetch",
-        },
-        customCss: `
-          .scalar-app { font-family: 'Inter', sans-serif; }
-          .section-hero { background: linear-gradient(135deg, #6C47FF22, #C026D322); }
-        `,
-        metaData: {
-          title:       "FormCraft API Documentation",
-          description: "Complete API reference for the FormCraft form builder platform",
-          ogTitle:     "FormCraft API",
-        },
+      url:       "/openapi.json",
+      theme:     "saturn",
+      darkMode:  true,
+      hideModels: false,
+      defaultHttpClient: {
+        targetKey:  "javascript",
+        clientKey:  "fetch",
       },
-    })
+      customCss: `
+        .scalar-app { font-family: 'Inter', sans-serif; }
+        .section-hero { background: linear-gradient(135deg, #6C47FF22, #C026D322); }
+      `,
+      metaData: {
+        title:       "FormCraft API Documentation",
+        description: "Complete API reference for the FormCraft form builder platform",
+        ogTitle:     "FormCraft API",
+      },
+    } as any)
   );
 }
 

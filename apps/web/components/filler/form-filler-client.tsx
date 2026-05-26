@@ -10,6 +10,7 @@ import { FillerThankYou }      from "./filler-thank-you";
 import { FillerPasswordGate }  from "./filler-password-gate";
 import { RiArrowDownLine, RiLoader4Line, RiArrowUpLine } from "react-icons/ri";
 import type { ThemeConfig } from "@repo/schemas";
+import { shouldShowField, type FieldWithLogic } from "~/lib/conditional-logic";
 
 type AnswerValue = string | number | boolean | string[] | null | undefined;
 
@@ -49,11 +50,14 @@ export function FormFillerClient({ slug, password }: Props) {
     }
   }, [form]);
 
-  // Only show interactive (non-statement) fields in filler
+  // Only show interactive (non-statement) fields in filler — with conditional logic
   const interactiveFields = ((form && typeof form === "object" && "fields" in form)
-    ? (form as { fields: { id: string; type: string; label: string; description: string | null; placeholder: string | null; required: boolean; options: unknown }[] }).fields
+    ? (form as { fields: { id: string; type: string; label: string; description: string | null; placeholder: string | null; required: boolean; options: unknown; logic: unknown }[] }).fields
     : []
-  ).filter((f) => !["welcome_screen", "thank_you_screen"].includes(f.type));
+  ).filter((f) =>
+    !["welcome_screen", "thank_you_screen"].includes(f.type) &&
+    shouldShowField(f as FieldWithLogic, answers)
+  );
 
   const currentField = interactiveFields[currentIdx];
   const progress     = interactiveFields.length > 0 ? ((currentIdx) / interactiveFields.length) * 100 : 0;

@@ -133,7 +133,7 @@ export function FieldSettingsPanel({ formId }: { formId: string }) {
   const {
     register, handleSubmit, reset, control, watch,
     setValue, formState: { errors, isDirty },
-  } = useForm<SettingsInput>({ resolver: zodResolver(settingsSchema) });
+  } = useForm<SettingsInput>({ resolver: zodResolver(settingsSchema) as any });
 
   const { fields: optionFields, append, remove, swap } = useFieldArray({
     control,

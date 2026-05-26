@@ -29,6 +29,7 @@
     "bcryptjs": "^3.0.3",
     "better-auth": "^1.6.11",
     "cors": "^2.8.5",
+    "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
     "express-rate-limit": "^8.5.2",
     "express-validator": "^7.3.2",
@@ -37,6 +38,6 @@
     "razorpay": "^2.9.6",
     "resend": "^6.12.3",
     "trpc-to-openapi": "^3.1.0",
-    "zod": "^3.25.0"
+    "zod": "^4.4.3"
   }
 }

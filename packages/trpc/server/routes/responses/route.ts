@@ -114,7 +114,7 @@ export const responsesRouter = router({
             // Get creator details
             const creator = await db.query.usersTable.findFirst({
               where: eq(usersTable.id, form.userId),
-              columns: { email: true, fullName: true },
+              columns: { email: true, name: true },
             });
             if (!creator) return;
 
@@ -131,7 +131,7 @@ export const responsesRouter = router({
 
             await sendResponseNotification({
               creatorEmail:   notifyTo,
-              creatorName:    creator.fullName,
+              creatorName:    creator.name,
               formId:         form.id,
               formTitle:      form.title,
               responseCount:  form.responseCount + 1,

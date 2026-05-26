@@ -1,13 +1,11 @@
 {
-  "extends": "@repo/typescript-config/node.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-
-    "moduleResolution": "Node",
-    "module": "CommonJS",
-
-    // We don't need these for our final build
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
     "declarationMap": false,
     "declaration": false,
     "sourceMap": false
