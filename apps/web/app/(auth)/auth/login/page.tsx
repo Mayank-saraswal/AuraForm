@@ -26,13 +26,13 @@ export default function LoginPage() {
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
 
   async function onSubmit(data: LoginInput) {
-    const result = await signIn.email({
+    const result = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      callbackURL: "/dashboard",
+      redirect: false,
     });
-    if (result.error) {
-      toast.error(result.error.message ?? "Invalid email or password.");
+    if (result?.error) {
+      toast.error("Invalid email or password.");
       return;
     }
     router.push("/dashboard");
@@ -40,15 +40,15 @@ export default function LoginPage() {
 
   async function handleGoogle() {
     setGoogleLoading(true);
-    await signIn.social({ provider: "google", callbackURL: "/dashboard" });
+    await signIn("google", { callbackUrl: "/dashboard" });
     setGoogleLoading(false);
   }
 
   return (
     <div>
       <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
-      <p className="mt-1.5 text-sm text-muted-foreground">
-        Sign in to your FormCraft account
+      <p className="mt-1.5 text-sm text-[var(--color-muted-foreground)]">
+        Sign in to your AuraForm account
       </p>
 
       <Button
@@ -90,7 +90,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             <Link href="/auth/forgot-password"
-              className="text-xs text-[#6C47FF] hover:underline">
+              className="text-xs text-[var(--color-foreground)] underline hover:text-[var(--color-muted-foreground)]">
               Forgot password?
             </Link>
           </div>
@@ -121,7 +121,7 @@ export default function LoginPage() {
 
         <Button
           type="submit"
-          className="mt-2 w-full bg-[#6C47FF] hover:bg-[#5B21B6]"
+          className="mt-2 w-full bg-[var(--color-foreground)] text-[var(--color-background)] hover:bg-[var(--color-foreground)]/90"
           disabled={isSubmitting}
         >
           {isSubmitting && <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />}
@@ -129,9 +129,9 @@ export default function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-sm text-[var(--color-muted-foreground)]">
         No account?{" "}
-        <Link href="/auth/register" className="font-medium text-[#6C47FF] hover:underline">
+        <Link href="/auth/register" className="font-medium text-[var(--color-foreground)] underline hover:text-[var(--color-muted-foreground)]">
           Create one free
         </Link>
       </p>
@@ -141,8 +141,8 @@ export default function LoginPage() {
         <p className="mb-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
           Demo credentials
         </p>
-        <p className="text-xs text-muted-foreground">
-          Email: <code className="font-mono">demo@formcraft.app</code>
+        <p className="text-xs text-[var(--color-muted-foreground)]">
+          Email: <code className="font-mono">demo@auraform.com</code>
         </p>
         <p className="text-xs text-muted-foreground">
           Password: <code className="font-mono">Demo1234!</code>

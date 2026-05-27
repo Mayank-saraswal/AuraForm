@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { trpc } from "~/trpc/client";
-import { useSession } from "~/lib/auth-client";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Button } from "~/components/ui/button";
@@ -131,8 +131,8 @@ export default function PricingPage() {
         description:      `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan \u2014 ${cycle}`,
         image:            "/icon.png",
         prefill: {
-          name:  session.user.name,
-          email: session.user.email,
+          name:  session.user?.name ?? undefined,
+          email: session.user?.email ?? undefined,
         },
         theme: { color: plan === "pro" ? "#6C47FF" : "#C026D3" },
         handler: async (response: {

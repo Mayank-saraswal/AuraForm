@@ -131,7 +131,7 @@ export const responsesRouter = router({
 
             await sendResponseNotification({
               creatorEmail:   notifyTo,
-              creatorName:    creator.name,
+              creatorName:    creator.name ?? "User",
               formId:         form.id,
               formTitle:      form.title,
               responseCount:  form.responseCount + 1,

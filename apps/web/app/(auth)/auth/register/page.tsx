@@ -6,13 +6,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { registerSchema, type RegisterInput } from "@repo/schemas";
-import { signUp, signIn } from "~/lib/auth-client";
+import { signIn } from "~/lib/auth-client";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Separator } from "~/components/ui/separator";
 import { RiGoogleLine, RiLoader4Line, RiEyeLine, RiEyeOffLine, RiCheckLine } from "react-icons/ri";
 import { useState } from "react";
+import { trpc } from "~/trpc/client";
 
 const PASSWORD_RULES = [
   { label: "At least 8 characters",   test: (p: string) => p.length >= 8 },
@@ -35,19 +36,40 @@ export default function RegisterPage() {
 
   const password = watch("password", "");
 
+  const registerMutation = trpc.auth.register.useMutation();
+
   async function onSubmit(data: RegisterInput) {
-    const result = await signUp.email({
-      name: data.fullName,
-      email: data.email,
-      password: data.password,
-      callbackURL: "/dashboard",
-    });
-    if (result.error) {
-      toast.error(result.error.message ?? "Registration failed. Please try again.");
-      return;
+    try {
+      // Step 1: Create user via API
+      try {
+        await registerMutation.mutateAsync({
+          fullName: data.fullName,
+          email: data.email,
+          password: data.password,
+        });
+      } catch (err: any) {
+        toast.error(err.message || "Registration failed. Please try again.");
+        return;
+      }
+
+      // Step 2: Sign in with credentials
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error("Account created but sign-in failed. Please log in manually.");
+        router.push("/auth/login");
+        return;
+      }
+
+      toast.success("Account created! Welcome to AuraForm.");
+      router.push("/dashboard");
+    } catch {
+      toast.error("Registration failed. Please try again.");
     }
-    toast.success("Account created! Welcome to FormCraft.");
-    router.push("/dashboard");
   }
 
   return (
@@ -63,7 +85,7 @@ export default function RegisterPage() {
         className="mt-8 w-full gap-2"
         onClick={async () => {
           setGoogleLoading(true);
-          await signIn.social({ provider: "google", callbackURL: "/dashboard" });
+          await signIn("google", { callbackUrl: "/dashboard" });
           setGoogleLoading(false);
         }}
         disabled={googleLoading}
@@ -126,7 +148,7 @@ export default function RegisterPage() {
 
         <Button
           type="submit"
-          className="mt-2 w-full bg-[#6C47FF] hover:bg-[#5B21B6]"
+          className="mt-2 w-full bg-[var(--color-foreground)] text-[var(--color-background)] hover:bg-[var(--color-foreground)]/90"
           disabled={isSubmitting}
         >
           {isSubmitting && <RiLoader4Line className="mr-2 h-4 w-4 animate-spin" />}
@@ -134,9 +156,9 @@ export default function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
+      <p className="mt-6 text-center text-sm text-[var(--color-muted-foreground)]">
         Already have an account?{" "}
-        <Link href="/auth/login" className="font-medium text-[#6C47FF] hover:underline">
+        <Link href="/auth/login" className="font-medium text-[var(--color-foreground)] underline hover:text-[var(--color-muted-foreground)]">
           Sign in
         </Link>
       </p>

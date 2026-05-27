@@ -13,6 +13,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@panva/hkdf": "^1.2.1",
     "@repo/database": "workspace:*",
     "@repo/email": "workspace:^",
     "@repo/schemas": "workspace:*",
@@ -20,9 +21,9 @@
     "@trpc/client": "^11.8.1",
     "@trpc/server": "^11.8.1",
     "bcryptjs": "^3.0.3",
-    "better-auth": "^1.6.11",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
+    "jose": "^6.2.3",
     "nanoid": "^5.1.11",
     "trpc-to-openapi": "^3.1.0",
     "zod": "^4.4.3"

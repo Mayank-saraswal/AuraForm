@@ -1,6 +1,14 @@
 import http from "node:http";
+import fs from "fs";
 import { logger } from "@repo/logger";
 import { app as expressApplication } from "./server";
+
+const logFile = fs.createWriteStream("api_debug.log", { flags: "a" });
+const originalError = console.error;
+console.error = function(...args) {
+  logFile.write(args.map(a => typeof a === "object" ? JSON.stringify(a, Object.getOwnPropertyNames(a)) : a).join(" ") + "\n");
+  originalError.apply(console, args);
+};
 
 import { env } from "./env";
 
@@ -18,3 +26,4 @@ async function init() {
 }
 
 init();
+// trigger reload

@@ -6,8 +6,7 @@ import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { generateOpenApiDocument, createOpenApiExpressMiddleware } from "trpc-to-openapi";
 import { apiReference } from "@scalar/express-api-reference";
-import { serverRouter, createContext, auth } from "@repo/trpc/server";
-import { toNodeHandler } from "better-auth/node";
+import { serverRouter, createContext } from "@repo/trpc/server";
 import { env } from "./env";
 
 export const app = express();
@@ -99,9 +98,7 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => res.json({ message: "FormCraft API is running." }));
 app.get("/health", (req, res) => res.json({ status: "healthy", ts: Date.now() }));
 
-// ── better-auth handler ───────────────────────────────────────────────────────
-// Express 5 requires named wildcards (path-to-regexp v8)
-app.all("/api/auth/{*splat}", toNodeHandler(auth));
+// Auth is handled by NextAuth in the Next.js app (apps/web)
 
 // ── OpenAPI + Scalar docs ─────────────────────────────────────────────────────
 let openApiDocument: ReturnType<typeof generateOpenApiDocument> | null = null;

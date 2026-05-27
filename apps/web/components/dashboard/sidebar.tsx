@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "~/lib/utils";
-import { signOut } from "~/lib/auth-client";
+import { signOut } from "next-auth/react";
 import {
   RiDashboardLine, RiRamLine, RiSettings3Line,
   RiLogoutBoxLine, RiGlobalLine, RiPaletteLine,
@@ -26,7 +26,7 @@ const BOTTOM_NAV = [
 ];
 
 interface SidebarProps {
-  user: { name?: string | null; email?: string; image?: string | null; id: string };
+  user: { name?: string | null; email?: string | null; image?: string | null; id: string };
 }
 
 export function DashboardSidebar({ user }: SidebarProps) {
@@ -110,7 +110,7 @@ export function DashboardSidebar({ user }: SidebarProps) {
             <p className="truncate text-xs text-muted-foreground">{user.email}</p>
           </div>
           <button
-            onClick={async () => { await signOut(); router.push("/"); }}
+            onClick={() => signOut({ callbackUrl: "/" })}
             className="text-muted-foreground hover:text-foreground transition-colors"
             title="Sign out"
           >

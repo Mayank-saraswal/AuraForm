@@ -1,82 +1,96 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@repo/database";
-import { sendWelcomeEmail } from "@repo/email";
-import {
-  usersTable,
-  sessionsTable,
-  accountsTable,
-  verificationsTable,
-} from "@repo/database";
+// packages/trpc/server/auth.ts
+// Session validation for the API server.
+// Decodes the NextAuth JWT session token from cookies.
+// With JWT strategy, sessions are NOT stored in the database.
 
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    schema: {
-      user: usersTable,
-      session: sessionsTable,
-      account: accountsTable,
-      verification: verificationsTable,
-    },
-  }),
+import { db, eq } from "@repo/database";
+import { usersTable } from "@repo/database";
 
-  emailAndPassword: {
-    enabled: true,
-    minPasswordLength: 8,
-    maxPasswordLength: 72,
-    requireEmailVerification: false, // set true in production
-    sendResetPassword: async ({ user, url }) => {
-      // Wire to Resend email in Step 7
-      console.log(`Password reset URL for ${user.email}: ${url}`);
-    },
-  },
+export interface SessionUser {
+  id: string;
+  email: string;
+  name: string | null;
+  plan: string;
+  emailVerified: Date | null;
+}
 
-  socialProviders: {
-    google: {
-      clientId: process.env["GOOGLE_CLIENT_ID"] ?? "",
-      clientSecret: process.env["GOOGLE_CLIENT_SECRET"] ?? "",
-    },
-  },
+/**
+ * Validate a NextAuth session token from request headers/cookies.
+ * Returns the user if valid, null otherwise.
+ *
+ * With JWT strategy, the token is a JWE (encrypted JWT). We decode it
+ * using the same secret NextAuth uses. If decoding fails, we fall back
+ * to looking up the user by the token's sub claim via database.
+ */
+export async function getSessionFromRequest(
+  headers: Record<string, string | string[] | undefined>
+): Promise<SessionUser | null> {
+  try {
+    const cookieHeader = headers["cookie"];
+    if (!cookieHeader || typeof cookieHeader !== "string") return null;
 
-  session: {
-    expiresIn: 60 * 60 * 24 * 30,       // 30 days
-    updateAge: 60 * 60 * 24,             // refresh session cookie every 24 hours
-    cookieCache: {
-      enabled: true,
-      maxAge: 60 * 5,
-    },
-  },
+    // Parse cookies to find the session token
+    const cookies = Object.fromEntries(
+      cookieHeader.split(";").map((c) => {
+        const [key, ...rest] = c.trim().split("=");
+        return [key?.trim(), rest.join("=").trim()];
+      })
+    );
 
-  databaseHooks: {
-    user: {
-      create: {
-        after: async (user) => {
-          try {
-            await sendWelcomeEmail({
-              toEmail: user.email,
-              toName:  user.name ?? "there",
-            });
-          } catch {
-            // Never block registration on email failure
-          }
-        },
-      },
-    },
-  },
+    const sessionToken =
+      cookies["__Secure-authjs.session-token"] ||
+      cookies["authjs.session-token"] ||
+      cookies["__Secure-next-auth.session-token"] ||
+      cookies["next-auth.session-token"];
 
-  trustedOrigins: [
-    process.env["FRONTEND_URL"] ?? "http://localhost:3000",
-  ],
+    if (!sessionToken) return null;
 
-  rateLimit: {
-    enabled: true,
-    window: 60,        // 60-second window
-    max: 10,           // max 10 auth attempts per window
-  },
+    // Decode the JWT using jose (same lib NextAuth v5 uses)
+    let userId: string | null = null;
+    try {
+      const { jwtDecrypt } = await import("jose");
+      const secret = process.env["AUTH_SECRET"] || process.env["NEXTAUTH_SECRET"];
+      if (!secret) return null;
 
-  advanced: {
-    cookiePrefix: "formcraft",
-  },
-});
+      // NextAuth v5 derives a 256-bit key from the secret via HKDF
+      const { hkdf } = await import("@panva/hkdf");
+      const derivedKey = await hkdf(
+        "sha256",
+        secret,
+        "",
+        "Auth.js Generated Encryption Key",
+        32
+      );
 
-export type Auth = typeof auth;
+      const { payload } = await jwtDecrypt(sessionToken, new Uint8Array(derivedKey), {
+        clockTolerance: 15,
+      });
+
+      userId = (payload.id as string) || (payload.sub as string) || null;
+    } catch {
+      // JWT decode failed — token invalid or expired
+      return null;
+    }
+
+    if (!userId) return null;
+
+    // Fetch the user from database
+    const [user] = await db
+      .select({
+        id: usersTable.id,
+        email: usersTable.email,
+        name: usersTable.name,
+        plan: usersTable.plan,
+        emailVerified: usersTable.emailVerified,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, userId))
+      .limit(1);
+
+    if (!user) return null;
+
+    return user;
+  } catch {
+    return null;
+  }
+}

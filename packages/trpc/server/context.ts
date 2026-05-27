@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { auth } from "./auth";
+import { getSessionFromRequest } from "./auth";
 
 export interface Context {
   req: Request;
@@ -23,14 +23,16 @@ export async function createContext({
   let user: Context["user"] = null;
 
   try {
-    const session = await auth.api.getSession({ headers: req.headers as unknown as Headers });
-    if (session?.user) {
+    const sessionUser = await getSessionFromRequest(
+      req.headers as Record<string, string | string[] | undefined>
+    );
+    if (sessionUser) {
       user = {
-        id: session.user.id,
-        email: session.user.email,
-        fullName: session.user.name ?? "",
-        plan: (session.user as Record<string, unknown>)["plan"] as string ?? "free",
-        emailVerified: session.user.emailVerified ?? false,
+        id: sessionUser.id,
+        email: sessionUser.email,
+        fullName: sessionUser.name ?? "",
+        plan: sessionUser.plan ?? "free",
+        emailVerified: !!sessionUser.emailVerified,
       };
     }
   } catch {

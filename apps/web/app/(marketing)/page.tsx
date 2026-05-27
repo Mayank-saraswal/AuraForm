@@ -1,20 +1,11 @@
-// apps/web/app/(marketing)/page.tsx
-import { HeroSection }     from "~/components/marketing/hero";
-import { FeaturesSection } from "~/components/marketing/features";
-import { ThemesSection }   from "~/components/marketing/themes";
-import { HowItWorks }      from "~/components/marketing/how-it-works";
-import { SocialProof }     from "~/components/marketing/social-proof";
-import { CTASection }      from "~/components/marketing/cta";
+import { HeroSection } from "~/components/marketing/hero";
+import { TestimonialSection } from "~/components/marketing/testimonial";
 
 export default function LandingPage() {
   return (
-    <>
+    <div className="bg-background min-h-screen">
       <HeroSection />
-      <FeaturesSection />
-      <ThemesSection />
-      <HowItWorks />
-      <SocialProof />
-      <CTASection />
-    </>
+      <TestimonialSection />
+    </div>
   );
 }

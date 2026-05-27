@@ -19,18 +19,6 @@ const nextConfig = {
       },
     ];
   },
-  async rewrites() {
-    // In development, proxy /auth/* to avoid CORS on auth endpoints
-    if (process.env.NODE_ENV === "development") {
-      return [
-        {
-          source:      "/auth/:path*",
-          destination: `${(process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/trpc").replace("/trpc", "")}/auth/:path*`,
-        },
-      ];
-    }
-    return [];
-  },
 };
 
 export default nextConfig;
