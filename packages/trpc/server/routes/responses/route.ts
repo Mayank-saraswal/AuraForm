@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, desc, asc, count, avg, sql, gte, lte } from "drizzle-orm";
+import { eq, and, desc, asc, count, avg, sql, gte, lte, inArray } from "drizzle-orm";
 import { router, protectedProcedure, publicProcedure } from "../../trpc";
 import { db } from "@repo/database";
 import { formsTable, formFieldsTable, responsesTable, responseAnswersTable, usersTable } from "@repo/database";
@@ -76,7 +76,6 @@ export const responsesRouter = router({
       const rawIp = ctx.req.ip ?? ctx.req.socket.remoteAddress ?? "unknown";
       const ipHash = hashIp(rawIp);
 
-      // Insert response + answers in a transaction
       const [response] = await db.transaction(async (tx) => {
         const [newResponse] = await tx
           .insert(responsesTable)
@@ -84,6 +83,11 @@ export const responsesRouter = router({
             formId: input.formId,
             ipHash,
             userAgent: ctx.req.headers["user-agent"] ?? null,
+            country: typeof ctx.req.headers["x-vercel-ip-country"] === "string" 
+              ? ctx.req.headers["x-vercel-ip-country"] 
+              : typeof ctx.req.headers["cf-ipcountry"] === "string" 
+              ? ctx.req.headers["cf-ipcountry"] 
+              : "Unknown",
             timeToCompleteMs: input.timeToCompleteMs,
           })
           .returning();
@@ -240,6 +244,57 @@ export const responsesRouter = router({
         dailyStats,
         fields: form.fields,
       };
+    }),
+
+  globalAnalytics: protectedProcedure
+    .meta(openApiMeta("GET", "/responses/global-analytics", ["Analytics"], true))
+    .query(async ({ ctx }) => {
+      // Get all forms owned by the user
+      const userForms = await db.query.formsTable.findMany({
+        where: eq(formsTable.userId, ctx.user.id),
+        columns: { id: true },
+      });
+      const formIds = userForms.map((f) => f.id);
+
+      if (formIds.length === 0) {
+        return { dailyStats: [], countryStats: [] };
+      }
+
+      // Daily Stats (last 90 days)
+      const dailyStats = await db
+        .select({
+          date: sql<string>`DATE(${responsesTable.submittedAt})`,
+          desktop: sql<number>`SUM(CASE WHEN ${responsesTable.userAgent} NOT ILIKE '%Mobi%' THEN 1 ELSE 0 END)::int`,
+          mobile: sql<number>`SUM(CASE WHEN ${responsesTable.userAgent} ILIKE '%Mobi%' THEN 1 ELSE 0 END)::int`,
+        })
+        .from(responsesTable)
+        .where(
+          and(
+            inArray(responsesTable.formId, formIds),
+            gte(responsesTable.submittedAt, new Date(Date.now() - 90 * 24 * 60 * 60 * 1000))
+          )
+        )
+        .groupBy(sql`DATE(${responsesTable.submittedAt})`)
+        .orderBy(sql`DATE(${responsesTable.submittedAt}) ASC`);
+
+      // Country Stats
+      const countryStats = await db
+        .select({
+          country: sql<string>`COALESCE(${responsesTable.country}, 'Unknown')`,
+          desktop: count(), // Using "desktop" to align with the radar chart's expected dataKey
+        })
+        .from(responsesTable)
+        .where(
+          and(
+            inArray(responsesTable.formId, formIds),
+            gte(responsesTable.submittedAt, new Date(Date.now() - 180 * 24 * 60 * 60 * 1000))
+          )
+        )
+        .groupBy(sql`COALESCE(${responsesTable.country}, 'Unknown')`)
+        .orderBy(desc(count()))
+        .limit(6);
+
+      return { dailyStats, countryStats };
     }),
 
   exportCsv: protectedProcedure

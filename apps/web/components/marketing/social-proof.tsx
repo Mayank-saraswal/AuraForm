@@ -9,7 +9,7 @@ const TESTIMONIALS = [
     name: "Priya Mehta",
     role: "Product Manager, Bangalore",
     avatar: "PM",
-    color: "#6C47FF",
+    color: "var(--primary)",
   },
   {
     quote: "We switched from Typeform and saved 80% on costs. The Netflix theme alone increased completion rates by 40%.",
@@ -39,7 +39,7 @@ export function SocialProof() {
     <section className="bg-[#080808] px-4 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center">
-          <p className="mb-4 text-sm font-bold tracking-widest text-[#6C47FF] uppercase">
+          <p className="mb-4 text-sm font-bold tracking-widest text-primary uppercase">
             Loved by creators
           </p>
           <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl">

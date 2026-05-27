@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { trpc } from "~/trpc/client";
 import { createTRPCHttpBatchClientClient } from "~/trpc/create-client";
 import { Toaster } from "react-hot-toast";
+import { TooltipProvider } from "~/components/ui/tooltip";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -41,20 +42,22 @@ export function GlobalProviders({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          {children}
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: "var(--background)",
-                color: "var(--foreground)",
-                border: "1px solid var(--border)",
-                borderRadius: "8px",
-                fontSize: "14px",
-              },
-            }}
-          />
+          <TooltipProvider>
+            {children}
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: "var(--background)",
+                  color: "var(--foreground)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                },
+              }}
+            />
+          </TooltipProvider>
         </QueryClientProvider>
       </trpc.Provider>
     </SessionProvider>

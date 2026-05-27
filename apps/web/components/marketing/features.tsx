@@ -8,7 +8,7 @@ import { TbForms, TbChartInfographic } from "react-icons/tb";
 const FEATURES = [
   {
     icon: TbForms,
-    color: "#6C47FF",
+    color: "var(--primary)",
     title: "One question at a time",
     desc: "Typeform-style full-screen experience. Keyboard navigation, smooth transitions, progress indicator.",
   },
@@ -61,7 +61,7 @@ export function FeaturesSection() {
     <section id="features" className="bg-[#050505] px-4 py-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center">
-          <p className="mb-3 text-sm font-medium tracking-widest text-[#6C47FF] uppercase">
+          <p className="mb-3 text-sm font-medium tracking-widest text-primary uppercase">
             Features
           </p>
           <h2 className="text-4xl font-bold text-white sm:text-5xl">

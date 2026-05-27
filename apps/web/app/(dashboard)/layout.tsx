@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "~/auth";
 import { DashboardSidebar } from "~/components/dashboard/sidebar";
 import { DashboardHeader }  from "~/components/dashboard/header";
+import { SidebarProvider, SidebarInset } from "~/components/ui/sidebar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Server-side auth guard
@@ -17,14 +18,14 @@ export default async function DashboardLayout({ children }: { children: React.Re
   };
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-background">
+    <SidebarProvider>
       <DashboardSidebar user={user} />
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <SidebarInset className="flex flex-col overflow-hidden bg-background">
         <DashboardHeader user={user} />
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto max-w-7xl p-6">{children}</div>
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

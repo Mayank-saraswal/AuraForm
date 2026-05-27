@@ -30,7 +30,7 @@ export function FillerThankYou({ title, message, animation }: Props) {
           height={windowSize.height}
           recycle={false}
           numberOfPieces={animation === "fireworks" ? 400 : 200}
-          colors={["#6C47FF", "#C026D3", "#10B981", "#F59E0B", "#EF4444"]}
+          colors={["var(--primary)", "#C026D3", "#10B981", "#F59E0B", "#EF4444"]}
         />
       )}
 

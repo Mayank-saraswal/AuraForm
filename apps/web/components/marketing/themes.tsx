@@ -70,7 +70,7 @@ export function ThemesSection() {
     <section id="themes" className="bg-[#080808] px-4 py-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center">
-          <p className="mb-3 text-sm font-medium tracking-widest text-[#6C47FF] uppercase">Themes</p>
+          <p className="mb-3 text-sm font-medium tracking-widest text-primary uppercase">Themes</p>
           <h2 className="text-4xl font-bold text-white sm:text-5xl">
             Pick a theme. <span className="gradient-text">Set the mood.</span>
           </h2>
@@ -89,7 +89,7 @@ export function ThemesSection() {
                 onClick={() => setActive(i)}
                 className={`flex items-center gap-4 rounded-xl border px-5 py-4 text-left transition-all ${
                   i === active
-                    ? "border-[#6C47FF] bg-[#6C47FF]/10"
+                    ? "border-primary bg-primary/10"
                     : "border-white/8 bg-white/3 hover:border-white/20"
                 }`}
               >

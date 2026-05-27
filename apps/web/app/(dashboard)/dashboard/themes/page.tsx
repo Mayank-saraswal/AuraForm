@@ -57,7 +57,7 @@ export default function ThemeGalleryPage() {
             key={cat}
             variant={activeCategory === cat ? "default" : "outline"}
             size="sm"
-            className={activeCategory === cat ? "bg-[#6C47FF] hover:bg-[#5B21B6]" : ""}
+            className={activeCategory === cat ? "bg-primary hover:bg-primary/90" : ""}
             onClick={() => setActiveCategory(cat)}
           >
             {cat}
@@ -120,7 +120,7 @@ export default function ThemeGalleryPage() {
                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
                     {formId ? (
                       <Button
-                        className="bg-[#6C47FF] hover:bg-[#5B21B6]"
+                        className="bg-primary hover:bg-primary/90"
                         onClick={() => applyTheme(theme.id)}
                         disabled={updateFormMutation.isPending}
                       >

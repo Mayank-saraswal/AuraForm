@@ -227,7 +227,7 @@ export function FieldSettingsPanel({ formId }: { formId: string }) {
         {isDirty && (
           <Button
             size="sm"
-            className="h-7 bg-[#6C47FF] px-3 text-xs"
+            className="h-7 bg-primary px-3 text-xs"
             onClick={handleSubmit(onSubmit)}
             disabled={updateMutation.isPending}
           >
@@ -443,7 +443,7 @@ export function FieldSettingsPanel({ formId }: { formId: string }) {
           <div className="p-4">
             <Button
               type="submit"
-              className="w-full bg-[#6C47FF] hover:bg-[#5B21B6]"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={updateMutation.isPending || !isDirty}
             >
               {updateMutation.isPending

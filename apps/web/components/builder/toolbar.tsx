@@ -130,7 +130,7 @@ export function BuilderToolbar({ formId }: { formId: string }) {
         ) : (
           <Button
             size="sm"
-            className="gap-1.5 bg-[#6C47FF] hover:bg-[#5B21B6]"
+            className="gap-1.5 bg-primary hover:bg-primary/90"
             onClick={handlePublish}
             disabled={publishMutation.isPending}
           >

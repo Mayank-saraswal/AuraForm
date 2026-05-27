@@ -57,7 +57,7 @@ const PLANS = [
       { label: "Priority email support",      included: false },
     ],
     cta:    "Upgrade to Pro",
-    color:  "#6C47FF",
+    color:  "var(--primary)",
     plan:   "pro" as const,
     popular: true,
   },
@@ -134,7 +134,7 @@ export default function PricingPage() {
           name:  session.user?.name ?? undefined,
           email: session.user?.email ?? undefined,
         },
-        theme: { color: plan === "pro" ? "#6C47FF" : "#C026D3" },
+        theme: { color: plan === "pro" ? "var(--primary)" : "#C026D3" },
         handler: async (response: {
           razorpay_payment_id: string;
           razorpay_order_id:   string;
@@ -210,13 +210,13 @@ export default function PricingPage() {
               transition={{ delay: i * 0.1 }}
               className={`relative rounded-2xl border p-8 ${
                 plan.popular
-                  ? "border-[#6C47FF] bg-[#6C47FF]/5"
+                  ? "border-primary bg-primary/5"
                   : "border-white/10 bg-white/[0.03]"
               }`}
             >
               {plan.popular && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-[#6C47FF] text-white">Most popular</Badge>
+                  <Badge className="bg-primary text-white">Most popular</Badge>
                 </div>
               )}
 

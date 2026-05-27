@@ -36,7 +36,7 @@ export default function ExplorePage() {
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-12 text-center">
-          <p className="mb-2 text-xs font-medium uppercase tracking-widest text-[#6C47FF]">Explore</p>
+          <p className="mb-2 text-xs font-medium uppercase tracking-widest text-primary">Explore</p>
           <h1 className="text-4xl font-bold text-white sm:text-5xl">
             Discover public forms
           </h1>
@@ -63,7 +63,7 @@ export default function ExplorePage() {
                 onClick={() => setCategory(cat)}
                 className={`flex-shrink-0 rounded-full px-4 py-1.5 text-xs font-medium transition-colors ${
                   category === cat
-                    ? "bg-[#6C47FF] text-white"
+                    ? "bg-primary text-white"
                     : "border border-white/10 bg-white/5 text-white/50 hover:text-white"
                 }`}
               >
@@ -102,17 +102,17 @@ export default function ExplorePage() {
                     className="flex h-24 items-end justify-between p-4"
                     style={{
                       background: themeConfig?.bgColor ?? "#1a1a1a",
-                      borderBottom: `2px solid ${(themeConfig?.accentColor ?? "#6C47FF")}20`,
+                      borderBottom: `2px solid ${(themeConfig?.accentColor ?? "var(--primary)")}20`,
                     }}
                   >
                     <div
                       className="h-2 w-16 rounded-full"
-                      style={{ background: themeConfig?.accentColor ?? "#6C47FF" }}
+                      style={{ background: themeConfig?.accentColor ?? "var(--primary)" }}
                     />
                     {form.theme && (
                       <Badge className="text-[10px]" style={{
-                        background: (themeConfig?.accentColor ?? "#6C47FF") + "30",
-                        color: themeConfig?.accentColor ?? "#6C47FF",
+                        background: (themeConfig?.accentColor ?? "var(--primary)") + "30",
+                        color: themeConfig?.accentColor ?? "var(--primary)",
                         border: "none",
                       }}>
                         {form.theme.name}
@@ -139,7 +139,7 @@ export default function ExplorePage() {
                     </div>
                     <Link
                       href={form.slug ? getFormShareUrl(form.slug) : "#"}
-                      className="mt-3 flex items-center gap-1 text-xs text-[#6C47FF] opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="mt-3 flex items-center gap-1 text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity"
                     >
                       Fill form <RiArrowRightLine className="h-3.5 w-3.5" />
                     </Link>

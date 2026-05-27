@@ -116,7 +116,7 @@ export default function FormAnalyticsPage() {
 
       {/* Metric cards */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <MetricCard label="Total views"      value={form.viewCount.toLocaleString()}     icon={RiEyeLine}          color="#6C47FF" />
+        <MetricCard label="Total views"      value={form.viewCount.toLocaleString()}     icon={RiEyeLine}          color="var(--primary)" />
         <MetricCard label="Responses"        value={totalResponses.toLocaleString()}     icon={TbChartInfographic} color="#10B981" />
         <MetricCard label="Completion rate"  value={`${form.completionRate}%`}           icon={RiBarChartLine}     color={completionColor} />
         <MetricCard label="Avg. time"        value={avgTimeMs ? formatDuration(avgTimeMs) : "\u2014"} icon={RiTimeLine} color="#F59E0B" />
@@ -148,9 +148,9 @@ export default function FormAnalyticsPage() {
               <Line
                 type="monotone"
                 dataKey="count"
-                stroke="#6C47FF"
+                stroke="var(--primary)"
                 strokeWidth={2}
-                dot={{ fill: "#6C47FF", r: 3 }}
+                dot={{ fill: "var(--primary)", r: 3 }}
                 name="Responses"
               />
             </LineChart>

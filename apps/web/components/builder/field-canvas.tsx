@@ -50,7 +50,7 @@ function SortableField({
       onClick={onSelect}
       className={cn(
         "group relative flex items-start gap-3 rounded-xl border bg-card p-4 cursor-pointer transition-all",
-        isSelected ? "border-[#6C47FF] ring-1 ring-[#6C47FF]/20" : "hover:border-border/80",
+        isSelected ? "border-primary ring-1 ring-primary/20" : "hover:border-border/80",
         isDragging && "builder-field-ghost"
       )}
     >
@@ -126,7 +126,7 @@ export function FieldCanvas({ formId }: { formId: string }) {
   if (fields.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/20">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#6C47FF]/10">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
           <RiRamLine className="h-12 w-12 text-muted-foreground/20" />
         </div>
         <div className="text-center">

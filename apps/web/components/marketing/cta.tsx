@@ -19,14 +19,14 @@ export function CTASection() {
         >
           {/* Subtle gradient glow inside the card */}
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute left-1/2 top-1/2 h-[300px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#6C47FF]/20 blur-[100px]" />
+            <div className="absolute left-1/2 top-1/2 h-[300px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[100px]" />
           </div>
 
           <div className="relative z-10">
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
               Ready to build forms that
               <br />
-              <span className="text-[#6C47FF]">people actually enjoy?</span>
+              <span className="text-primary">people actually enjoy?</span>
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-white/60">
               Join thousands of creators, startups, and teams using FormCraft
@@ -36,7 +36,7 @@ export function CTASection() {
               <Button
                 asChild
                 size="lg"
-                className="h-14 gap-2 rounded-xl bg-[#6C47FF] px-8 text-base font-bold hover:bg-[#5B21B6]"
+                className="h-14 gap-2 rounded-xl bg-primary px-8 text-base font-bold hover:bg-primary/90"
               >
                 <Link href="/auth/register">
                   <FiZap className="h-5 w-5" />

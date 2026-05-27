@@ -134,7 +134,7 @@ export default function FormsListPage() {
             }
           </Button>
 
-          <Button asChild className="gap-1.5 bg-[#6C47FF] hover:bg-[#5B21B6]">
+          <Button asChild className="gap-1.5 bg-primary hover:bg-primary/90">
             <Link href="/dashboard/forms/new">
               <RiAddLine className="h-4 w-4" />
               New form
@@ -164,7 +164,7 @@ export default function FormsListPage() {
             {search ? "No forms match your search." : "No forms yet. Create your first one!"}
           </p>
           {!search && (
-            <Button asChild size="sm" className="bg-[#6C47FF]">
+            <Button asChild size="sm" className="bg-primary">
               <Link href="/dashboard/forms/new">
                 <RiAddLine className="mr-1.5 h-4 w-4" />
                 Create form
@@ -185,7 +185,7 @@ export default function FormsListPage() {
               >
                 {/* Theme colour strip */}
                 <div className="flex h-2 w-full overflow-hidden rounded-t-xl">
-                  <div className="flex-1 bg-[#6C47FF]" />
+                  <div className="flex-1 bg-primary" />
                 </div>
 
                 <div className="flex flex-1 flex-col gap-3 p-5">

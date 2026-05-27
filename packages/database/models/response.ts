@@ -18,9 +18,9 @@ export const responsesTable = pgTable(
       .notNull()
       .references(() => formsTable.id, { onDelete: "cascade" }),
 
-    // We never store raw IP — always SHA-256 hash of IP+salt
     ipHash: text("ip_hash"),
     userAgent: text("user_agent"),
+    country: text("country"),
 
     // Client-reported completion time in ms
     timeToCompleteMs: integer("time_to_complete_ms"),

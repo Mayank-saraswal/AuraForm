@@ -281,7 +281,7 @@ export function FormSettingsDrawer({ formId, open, onClose }: Props) {
           <div className="sticky bottom-0 bg-background pt-4 pb-2">
             <Button
               type="submit"
-              className="w-full bg-[#6C47FF] hover:bg-[#5B21B6]"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={isSubmitting || updateMutation.isPending}
             >
               {(isSubmitting || updateMutation.isPending) && (

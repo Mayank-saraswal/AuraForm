@@ -52,7 +52,7 @@ export default function NewFormPage() {
             </div>
             <Button
               type="submit"
-              className="gap-2 bg-[#6C47FF] hover:bg-[#5B21B6]"
+              className="gap-2 bg-primary hover:bg-primary/90"
               disabled={isSubmitting || createMutation.isPending}
             >
               {(isSubmitting || createMutation.isPending)

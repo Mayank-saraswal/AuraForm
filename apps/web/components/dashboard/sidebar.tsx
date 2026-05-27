@@ -11,6 +11,18 @@ import {
 import { TbForms, TbChartInfographic } from "react-icons/tb";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "~/components/ui/sidebar";
 
 const NAV = [
   { href: "/dashboard",           label: "Overview",      icon: RiDashboardLine },
@@ -31,79 +43,75 @@ interface SidebarProps {
 
 export function DashboardSidebar({ user }: SidebarProps) {
   const pathname = usePathname();
-  const router   = useRouter();
 
   const initials = (user.name ?? user.email ?? "U")
     .split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
   return (
-    <aside className="hidden md:flex h-full w-[240px] flex-col border-r bg-sidebar">
+    <Sidebar variant="sidebar">
       {/* Logo */}
-      <div className="flex h-[60px] items-center gap-2.5 border-b px-5">
-        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-[#6C47FF]">
-          <RiRamLine className="h-4 w-4 text-white" />
-        </div>
-        <span className="text-sm font-semibold">FormCraft</span>
-      </div>
+      <SidebarHeader className="h-[60px] border-b justify-center px-4">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary">
+            <RiRamLine className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <span className="text-sm font-semibold tracking-tight">AuraForm</span>
+        </Link>
+      </SidebarHeader>
 
-      {/* Main nav */}
-      <nav className="flex-1 overflow-y-auto py-4">
-        <div className="px-3">
-          <p className="mb-1.5 px-2 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
-            Workspace
-          </p>
-          <ul className="flex flex-col gap-0.5">
-            {NAV.map(({ href, label, icon: Icon }) => {
-              const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className={cn(
-                      "flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors",
-                      active
-                        ? "bg-[#6C47FF]/10 text-[#6C47FF] font-medium"
-                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
-                    )}
-                  >
-                    <Icon className="h-4 w-4 flex-shrink-0" />
-                    {label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      <SidebarContent>
+        {/* Main nav */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {NAV.map(({ href, label, icon: Icon }) => {
+                const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+                return (
+                  <SidebarMenuItem key={href}>
+                    <SidebarMenuButton asChild isActive={active} tooltip={label}>
+                      <Link href={href}>
+                        <Icon />
+                        <span>{label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
 
-        <div className="mt-6 px-3">
-          <p className="mb-1.5 px-2 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
-            Platform
-          </p>
-          <ul className="flex flex-col gap-0.5">
-            {BOTTOM_NAV.map(({ href, label, icon: Icon, badge }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                >
-                  {Icon && <Icon className="h-4 w-4 flex-shrink-0" />}
-                  {label}
-                  {badge && (
-                    <Badge className="ml-auto h-4 px-1.5 text-[10px] bg-[#6C47FF] text-white">{badge}</Badge>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
+        <SidebarGroup>
+          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {BOTTOM_NAV.map(({ href, label, icon: Icon, badge }) => (
+                <SidebarMenuItem key={href}>
+                  <SidebarMenuButton asChild tooltip={label}>
+                    <Link href={href} className="flex justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        {Icon && <Icon />}
+                        <span>{label}</span>
+                      </div>
+                      {badge && (
+                        <Badge variant="default" className="h-4 px-1.5 text-[10px]">{badge}</Badge>
+                      )}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
 
       {/* User profile + signout */}
-      <div className="border-t p-3">
-        <div className="flex items-center gap-3 rounded-md px-2 py-2">
+      <SidebarFooter className="border-t p-3">
+        <div className="flex items-center gap-3 px-2 py-1">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user.image ?? undefined} />
-            <AvatarFallback className="bg-[#6C47FF]/20 text-[#6C47FF] text-xs">{initials}</AvatarFallback>
+            <AvatarFallback className="bg-primary/10 text-primary text-xs">{initials}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="truncate text-sm font-medium">{user.name ?? "User"}</p>
@@ -117,7 +125,7 @@ export function DashboardSidebar({ user }: SidebarProps) {
             <RiLogoutBoxLine className="h-4 w-4" />
           </button>
         </div>
-      </div>
-    </aside>
+      </SidebarFooter>
+    </Sidebar>
   );
 }
