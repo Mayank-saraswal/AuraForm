@@ -346,7 +346,7 @@ pnpm dev
 - **Fixed `apps/api/src/server.ts`**: Changed `generateOpenApiDocument` `tags` from `{name, description}[]` objects to `string[]` as required by `trpc-to-openapi` API, resolving 7 TS2322 errors.
 - **Fixed `packages/trpc`**: Added `@types/express-serve-static-core` and `@types/qs` as devDependencies to fix TS2742 (\"inferred type cannot be named without a reference\") on `protectedProcedure` and `proProcedure` exports.
 - **Fixed `packages/email`**: Created missing `tsconfig.json` with JSX support (`react-jsx`). Added `@types/node` and `@types/react` as devDependencies.
-- **Created `packages/email/src/templates/welcome.tsx`**: Welcome email template with FormCraft branding, CTA button to dashboard.
+- **Created `packages/email/src/templates/welcome.tsx`**: Welcome email template with AuraForm branding, CTA button to dashboard.
 - **Created `packages/email/src/templates/form-confirmation.tsx`**: Response confirmation email template for form respondents.
 - **Updated `packages/email/src/index.ts`**: Added exports for `welcome` and `form-confirmation` templates (previously referenced but missing).
 - **Result**: All 8 packages/apps (`database`, `schemas`, `trpc`, `email`, `services`, `logger`, `api`, `web`) pass `tsc --noEmit` with **zero TypeScript errors** and no `ts-ignore` directives.
@@ -463,8 +463,8 @@ pnpm dev
 ### Phase 4: Integrations & Polish (2026-05-25)
 - **Email Infrastructure**: Installed `@react-email/render`, `@react-email/components`, and `resend`. Upgraded templates (`WelcomeEmail`, `ResponseNotificationEmail`, `FormConfirmationEmail`) with cinematic aesthetics.
 - **Resend Integration**: Wired `sendWelcomeEmail` into better-auth's `onUserCreated` database hook. Wired `sendResponseNotification` into the tRPC form response submission mutation (async, non-blocking).
-- **Database Seed Script**: Built a deterministic `db:seed` script in `packages/database/seed.ts` containing 13 themes, 1 demo user (`demo@formcraft.app`), 5 populated forms, and 400+ generated realistic responses. Added `db:seed` to `turbo.json`.
-- **API Documentation**: Upgraded Scalar / OpenAPI metadata in `apps/api/src/server.ts` with custom FormCraft branding, dark mode, rate limiting details, and demo credentials.
+- **Database Seed Script**: Built a deterministic `db:seed` script in `packages/database/seed.ts` containing 13 themes, 1 demo user (`demo@auraform.app`), 5 populated forms, and 400+ generated realistic responses. Added `db:seed` to `turbo.json`.
+- **API Documentation**: Upgraded Scalar / OpenAPI metadata in `apps/api/src/server.ts` with custom AuraForm branding, dark mode, rate limiting details, and demo credentials.
 - **Documentation**: Created a comprehensive, copy-paste ready `README.md` at the monorepo root and a `.env.example` with detailed environment variables layout.
 - **TypeScript**: Perfect type checking across all 10 packages using `pnpm check-types`.
 

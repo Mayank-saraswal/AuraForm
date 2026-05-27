@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import {
   RiEyeLine, RiEyeOffLine, RiLoader4Line, RiGlobalLine, RiLinkM,
   RiShareLine, RiCheckLine, RiArrowLeftLine, RiSettings3Line,
+  RiPaletteLine,
 } from "react-icons/ri";
 import Link from "next/link";
 import { getFormShareUrl } from "~/lib/utils";
@@ -17,12 +18,14 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "~/components/ui/dialog";
 import { FormSettingsDrawer } from "./form-settings-drawer";
+import { ThemeCustomizerDrawer } from "./theme-customizer-drawer";
 
 export function BuilderToolbar({ formId }: { formId: string }) {
   const { form, isDirty, previewMode, togglePreview } = useFormBuilder();
   const [shareOpen, setShareOpen] = useState(false);
   const [copied, setCopied]       = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [designOpen, setDesignOpen] = useState(false);
   const utils = trpc.useUtils();
 
   const publishMutation   = trpc.forms.publish.useMutation();
@@ -107,6 +110,18 @@ export function BuilderToolbar({ formId }: { formId: string }) {
           </Dialog>
         )}
 
+        <Button variant="ghost" size="sm" asChild className="gap-1.5 text-muted-foreground">
+          <Link href={`/dashboard/themes?formId=${formId}`}>
+            <RiPaletteLine className="h-4 w-4" />
+            Theme Gallery
+          </Link>
+        </Button>
+
+        <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground" onClick={() => setDesignOpen(true)}>
+          <RiPaletteLine className="h-4 w-4" />
+          Design
+        </Button>
+
         <Button variant="ghost" size="sm" className="gap-1.5" onClick={() => setSettingsOpen(true)}>
           <RiSettings3Line className="h-4 w-4" />
           Settings
@@ -143,6 +158,7 @@ export function BuilderToolbar({ formId }: { formId: string }) {
         )}
       </div>
       <FormSettingsDrawer formId={formId} open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <ThemeCustomizerDrawer formId={formId} open={designOpen} onClose={() => setDesignOpen(false)} />
     </div>
   );
 }

@@ -61,7 +61,7 @@ export function FillerThankYou({ title, message, animation }: Props) {
         className="flex flex-col items-center gap-3"
       >
         <p className="text-sm opacity-40" style={{ color: "var(--filler-text)" }}>
-          Built with FormCraft
+          Built with AuraForm
         </p>
         <Link
           href="/"

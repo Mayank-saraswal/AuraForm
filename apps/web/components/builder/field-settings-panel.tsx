@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useFormBuilder } from "~/stores/form-builder";
@@ -12,6 +12,7 @@ import { Label } from "~/components/ui/label";
 import { Textarea } from "~/components/ui/textarea";
 import { Switch } from "~/components/ui/switch";
 import { Separator } from "~/components/ui/separator";
+import { RichTextEditor } from "~/components/ui/rich-text-editor";
 import {
   Accordion,
   AccordionContent,
@@ -254,11 +255,16 @@ export function FieldSettingsPanel({ formId }: { formId: string }) {
                 {/* Label */}
                 <div className="flex flex-col gap-1.5">
                   <Label className="text-xs">Question label</Label>
-                  <Textarea
-                    {...register("label")}
-                    rows={2}
-                    className="resize-none text-sm"
-                    placeholder="What is your question?"
+                  <Controller
+                    control={control}
+                    name="label"
+                    render={({ field }) => (
+                      <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                        placeholder="What is your question?"
+                      />
+                    )}
                   />
                   {errors.label && (
                     <p className="text-[11px] text-destructive">{errors.label.message}</p>

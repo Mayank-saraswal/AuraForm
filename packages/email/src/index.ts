@@ -13,7 +13,7 @@ function getResend(): Resend {
   return new Resend(key);
 }
 
-const FROM = process.env["RESEND_FROM_EMAIL"] ?? "FormCraft <noreply@formcraft.app>";
+const FROM = process.env["RESEND_FROM_EMAIL"] ?? "AuraForm <noreply@auraform.app>";
 const APP_URL = process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
 
 // ── Email senders ─────────────────────────────────────────────────────────────
@@ -33,7 +33,7 @@ export async function sendWelcomeEmail(opts: {
   await resend.emails.send({
     from:    FROM,
     to:      opts.toEmail,
-    subject: `Welcome to FormCraft, ${opts.toName}!`,
+    subject: `Welcome to AuraForm, ${opts.toName}!`,
     html,
   });
 }

@@ -34,12 +34,17 @@ export const updateFormSchema = z.object({
   thankYouMessage: z.string().max(1000).optional().nullable(),
   redirectUrl: z.string().url().optional().nullable(),
   // Branding
-  showBranding: z.boolean().optional(), // hide "Powered by FormCraft" on Pro
+  showBranding: z.boolean().optional(), // hide "Powered by AuraForm" on Pro
 });
 
 export const publishFormSchema = z.object({
   id: z.string().uuid(),
   visibility: formVisibilitySchema,
+});
+
+export const updateCustomThemeSchema = z.object({
+  id: z.string().uuid(),
+  themeConfig: z.record(z.any()), // We allow passing Partial<ThemeConfig>
 });
 
 // Used when getting a form by slug for public filling

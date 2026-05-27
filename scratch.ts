@@ -1,0 +1,1 @@
+import "dotenv/config"; import { db } from "./packages/database/index"; async function run() { try { await db.execute(`ALTER TABLE "users" DROP COLUMN "email_verified";`); console.log("Dropped email_verified"); } catch(e) { console.error("Error:", e); } process.exit(0); } run();

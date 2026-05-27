@@ -1,4 +1,4 @@
-# FormCraft — Landing Page Redesign Prompt
+# AuraForm — Landing Page Redesign Prompt
 # Inspired by the NHM motionsites.ai editorial aesthetic
 # Adapted for: Next.js 15 App Router · Tailwind CSS v4 · motion (framer-motion) · react-icons · TypeScript
 # File: apps/web/app/(marketing)/page.tsx + component files
@@ -7,13 +7,13 @@
 
 ## CONTEXT
 
-You are redesigning the FormCraft landing page. FormCraft is an India-first
+You are redesigning the AuraForm landing page. AuraForm is an India-first
 Typeform competitor — a form builder SaaS where creators build cinematic,
 one-question-at-a-time forms with 20+ visual themes.
 
 The design reference is an editorial, typographic, monochrome website
 (Natural History Museum style). You will **adapt** that design language
-to FormCraft's brand:
+to AuraForm's brand:
 
 - Replace dinosaurs / fossils content with forms / data / creativity
 - Replace all lucide-react icons with react-icons (Remix Icons / Tabler)
@@ -144,7 +144,7 @@ export const scaleIn = {
 ```typescript
 // apps/web/lib/landing-data.ts
 
-// FormCraft theme previews — replaces NHM chapter data
+// AuraForm theme previews — replaces NHM chapter data
 export const themesData = [
   {
     name:    "Netflix",
@@ -152,7 +152,7 @@ export const themesData = [
     bg:      "#141414",
     accent:  "#E50914",
     image:   "https://res.cloudinary.com/dsdxaxkiz/image/upload/v1779624247/01_udnber.png",
-    // Replace with FormCraft form preview screenshots when available
+    // Replace with AuraForm form preview screenshots when available
   },
   {
     name:    "Pink City Jaipur",
@@ -239,13 +239,13 @@ useEffect(() => {
 Container: `"use client"` component.
 `relative w-full min-h-screen flex flex-col overflow-hidden bg-[#fcfcfc]`
 
-### 1A. HEADER — FormCraft wordmark logo (SVG polygon letters, same technique as NHM)
+### 1A. HEADER — AuraForm wordmark logo (SVG polygon letters, same technique as NHM)
 
 `motion.header` with `staggerChildren: 0.08, delayChildren: 0.1`
 Padding: `pt-6 px-6 md:px-16 z-20`
 
 The logo is an inline SVG built from polygon shapes — same letter-animation
-technique as the NHM "NHM" logo, applied to "FC" (FormCraft initials)
+technique as the NHM "NHM" logo, applied to "FC" (AuraForm initials)
 OR the full wordmark "FORMCRAFT" using geometric block letters.
 
 Use the `letterBlock` variant for each polygon so letters slide up
@@ -274,13 +274,13 @@ from `y: 120` on load.
   </svg>
 </motion.h1>
 
-{/* FormCraft wordmark text next to the monogram */}
+{/* AuraForm wordmark text next to the monogram */}
 <motion.span
   variants={fadeUp}
   transition={{ duration: 0.7, delay: 0.4 }}
   className="text-[13px] font-mono tracking-[0.25em] uppercase text-[#111] ml-4"
 >
-  FormCraft
+  AuraForm
 </motion.span>
 ```
 
@@ -301,7 +301,7 @@ Platform
 **Arrow separator** (5%, desktop only):
 `RiArrowRightLine` size 14, `text-gray-400`
 
-**Center column** (flex-1) — FormCraft tagline:
+**Center column** (flex-1) — AuraForm tagline:
 ```
 "Build forms that feel like
 an experience. One question
@@ -335,7 +335,7 @@ Visit, Features, Themes, Pricing, Docs
 Appears after 2800ms (`showVideo` state).
 `absolute top-0 left-0 w-full h-full pointer-events-none z-0`
 
-**Replace the NHM dinosaur video with a FormCraft-appropriate looping video:**
+**Replace the NHM dinosaur video with a AuraForm-appropriate looping video:**
 Use a subtle abstract particle / flowing gradient / topographic lines video.
 Suggested: a dark generative art loop or a minimal desk/studio b-roll.
 
@@ -477,7 +477,7 @@ max-width 1000px, text-center.
 
 ### 2C. ACTION PILLS
 
-**Replace NHM category pills with FormCraft feature pills:**
+**Replace NHM category pills with AuraForm feature pills:**
 
 ```tsx
 const pills = [
@@ -495,7 +495,7 @@ Staggered reveal `staggerChildren: 0.1, delayChildren: 0.3`
 
 ### 2D. STATS ROW
 
-**Add this between pills and spacer (NHM did not have this — FormCraft-specific):**
+**Add this between pills and spacer (NHM did not have this — AuraForm-specific):**
 
 Four stat counters in a row:
 ```
@@ -530,13 +530,13 @@ Container: `relative w-full bg-[#0a0a0a] text-white flex flex-col z-30`
 
 ### 3A. OVERLAPPING DECORATIVE ELEMENT
 
-**Replace the pterodactyl image with a FormCraft form preview mockup:**
+**Replace the pterodactyl image with a AuraForm form preview mockup:**
 
 The element that overlaps from Section 2 into Section 3:
-- A floating phone/browser mockup showing a live FormCraft form
+- A floating phone/browser mockup showing a live AuraForm form
   in the "Netflix" theme (dark bg, red accent, one question visible)
 - OR use an abstract decorative element: a large circle with gradient
-  that represents the FormCraft "orb" / brand shape
+  that represents the AuraForm "orb" / brand shape
 
 ```tsx
 <motion.div
@@ -550,7 +550,7 @@ The element that overlaps from Section 2 into Section 3:
   transition={{ duration: 1.4, ease: "easeOut" }}
   viewport={{ margin: "100px" }}
 >
-  {/* FormCraft theme preview — replace with actual screenshot */}
+  {/* AuraForm theme preview — replace with actual screenshot */}
   <div className="w-full aspect-[16/9] rounded-2xl overflow-hidden border border-white/10
                   bg-[#141414] shadow-2xl shadow-[#6C47FF]/20">
     {/* Mock form preview in Netflix theme */}
@@ -614,7 +614,7 @@ Hover: `bg-white text-black border-white`
 
 ### 3C. TWO-COLUMN PANEL (Theme Explorer)
 
-**Replaces NHM chapters panel with FormCraft theme gallery**
+**Replaces NHM chapters panel with AuraForm theme gallery**
 
 `h-[1px] bg-gray-800` divider line.
 
@@ -622,7 +622,7 @@ Hover: `bg-white text-black border-white`
 `border-r border-gray-800 min-h-[400px] md:min-h-[500px]`
 
 Same `SandTransitionImage` technique (SVG filter sand dissolve) as NHM —
-but applied to FormCraft theme preview images:
+but applied to AuraForm theme preview images:
 
 ```tsx
 {/* Section indicator */}
@@ -830,7 +830,7 @@ Clicking a theme sets `activeTheme`. Below the list, add a CTA:
 
 ## SECTION 4: "HOW IT WORKS" (Light section)
 
-**NHM did not have this section — FormCraft-specific addition.**
+**NHM did not have this section — AuraForm-specific addition.**
 Container: `bg-[#fcfcfc] px-8 md:px-16 py-24 md:py-32`
 
 ### 4A. Section label:
@@ -920,7 +920,7 @@ Same editorial mono style as NHM footer:
 ```
 Left block:
   "FC"  (the SVG monogram, small, white)
-  "FormCraft"  font-mono tracking-widest
+  "AuraForm"  font-mono tracking-widest
   "Forms that feel like an experience."
   text-gray-500 font-mono text-xs mt-2
 
@@ -938,7 +938,7 @@ Right:
 Bottom divider: h-[1px] bg-gray-800
 
 Bottom bar: flex justify-between
-  Left:  "(C) 2026 FormCraft. All rights reserved."
+  Left:  "(C) 2026 AuraForm. All rights reserved."
   Right: "Built in Jaipur, India."
   Both:  text-[10px] font-mono text-gray-600
 ```
@@ -1001,7 +1001,7 @@ export default function LandingPage() {
 Off-white background: #fcfcfc
 Near-black text/UI:   #111 / #1a1a1a
 Dark section bg:      #0a0a0a
-FormCraft accent:     #6C47FF  ← ONLY accent color. Used sparingly.
+AuraForm accent:     #6C47FF  ← ONLY accent color. Used sparingly.
 Grays:                gray-300 through gray-800 (Tailwind)
 ```
 

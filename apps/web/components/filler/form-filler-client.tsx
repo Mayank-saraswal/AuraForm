@@ -30,12 +30,11 @@ export function FormFillerClient({ slug, password }: Props) {
   const [direction,   setDirection]   = useState(1);
   const [answers,     setAnswers]     = useState<Record<string, AnswerValue>>({});
   const [submitted,   setSubmitted]   = useState(false);
-  const [pwGate,      setPwGate]      = useState(!password);
   const [unlockedPw,  setUnlockedPw]  = useState<string | undefined>(password);
 
   const { data: form, isLoading, error } = trpc.forms.getBySlug.useQuery(
     { slug, password: unlockedPw },
-    { retry: false, enabled: !pwGate || !!unlockedPw }
+    { retry: false }
   );
 
   const submitMutation = trpc.responses.submit.useMutation();
@@ -119,6 +118,18 @@ export function FormFillerClient({ slug, password }: Props) {
     );
   }
 
+  const isPasswordError = error?.message === "This form is password protected." || error?.message === "Incorrect password.";
+
+  if (isPasswordError) {
+    return (
+      <FillerPasswordGate
+        error={error?.message === "Incorrect password." ? "Incorrect password. Please try again." : null}
+        onUnlock={(pw) => setUnlockedPw(pw)}
+        isLoading={isLoading}
+      />
+    );
+  }
+
   if (error || !form) {
     return (
       <div className="flex min-h-dvh flex-col items-center justify-center gap-4 p-6 text-center">
@@ -150,13 +161,19 @@ export function FormFillerClient({ slug, password }: Props) {
 
   return (
     <div ref={rootRef} className="filler-root relative flex min-h-dvh flex-col">
+      {/* Background glass overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0 backdrop-blur-md"
+        style={{ backgroundColor: "rgba(0, 0, 0, var(--filler-bg-overlay, 0))" }}
+      />
+
       {/* Progress bar */}
       <div className="absolute left-0 right-0 top-0 z-10 h-1 bg-black/10">
         <div className="filler-progress-fill h-full" style={{ width: `${progress}%` }} />
       </div>
 
       {/* Question area */}
-      <div className="flex flex-1 items-center justify-center px-6 py-16">
+      <div className="relative flex flex-1 items-center justify-center px-6 py-16 z-10">
         <div className="w-full max-w-2xl">
           <AnimatePresence mode="wait" custom={direction}>
             {currentField && (
@@ -184,7 +201,7 @@ export function FormFillerClient({ slug, password }: Props) {
       </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between p-6">
+      <div className="relative flex items-center justify-between p-6 z-10">
         <div className="flex items-center gap-2">
           <button
             onClick={handlePrev}
@@ -227,11 +244,11 @@ export function FormFillerClient({ slug, password }: Props) {
         </div>
       </div>
 
-      {/* FormCraft branding (hidden on Pro) */}
+      {/* AuraForm branding (hidden on Pro) */}
       {formObj.showBranding && (
         <div className="pb-4 text-center">
           <a href="/" className="text-xs opacity-30 hover:opacity-60 transition-opacity">
-            Powered by FormCraft
+            Powered by AuraForm
           </a>
         </div>
       )}

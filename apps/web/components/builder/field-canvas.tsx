@@ -1,5 +1,6 @@
 // apps/web/components/builder/field-canvas.tsx
 "use client";
+import * as React from "react";
 import { useFormBuilder, type BuilderField } from "~/stores/form-builder";
 import { trpc } from "~/trpc/client";
 import {
@@ -46,11 +47,15 @@ function SortableField({
   return (
     <div
       ref={setNodeRef}
-      style={style}
+      style={{
+        ...style,
+        backgroundColor: "var(--filler-question-bg, hsl(var(--card)))",
+        backdropFilter: "blur(var(--filler-question-blur, 0px))",
+      }}
       onClick={onSelect}
       className={cn(
-        "group relative flex items-start gap-3 rounded-xl border bg-card p-4 cursor-pointer transition-all",
-        isSelected ? "border-primary ring-1 ring-primary/20" : "hover:border-border/80",
+        "group relative flex items-start gap-3 rounded-xl border p-4 cursor-pointer transition-all",
+        isSelected ? "border-primary ring-1 ring-primary/20" : "border-border/40 hover:border-border/80",
         isDragging && "builder-field-ghost"
       )}
     >
@@ -73,7 +78,10 @@ function SortableField({
             <span className="text-[10px] text-[#EF4444] font-medium">Required</span>
           )}
         </div>
-        <p className="text-sm font-medium truncate">{field.label}</p>
+        <div
+          className="text-sm font-medium prose prose-sm dark:prose-invert max-w-none line-clamp-2"
+          dangerouslySetInnerHTML={{ __html: field.label }}
+        />
         {field.description && (
           <p className="mt-0.5 text-xs text-muted-foreground truncate">{field.description}</p>
         )}
@@ -95,8 +103,22 @@ function SortableField({
 }
 
 export function FieldCanvas({ formId }: { formId: string }) {
-  const { fields, selectedFieldId, selectField, reorderFields } = useFormBuilder();
+  const { fields, selectedFieldId, selectField, reorderFields, theme } = useFormBuilder();
   const utils = trpc.useUtils();
+  const rootRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (rootRef.current && theme?.config) {
+      // Import applyThemeToDom dynamically or just ensure it's available
+      import("~/lib/utils").then(({ applyThemeToDom }) => {
+        applyThemeToDom(rootRef.current!, theme.config as any);
+      });
+    } else if (rootRef.current) {
+      // Reset to defaults if no theme
+      rootRef.current.style.removeProperty("--filler-bg");
+      rootRef.current.style.removeProperty("--filler-font");
+    }
+  }, [theme]);
 
   const reorderMutation = trpc.fields.reorder.useMutation({
     onError: (e) => toast.error(e.message),
@@ -125,13 +147,20 @@ export function FieldCanvas({ formId }: { formId: string }) {
 
   if (fields.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-muted/20">
+      <div 
+        ref={rootRef}
+        className="flex flex-1 flex-col items-center justify-center gap-4 transition-colors"
+        style={{ 
+          backgroundColor: theme?.config ? "var(--filler-bg)" : "hsl(var(--muted) / 0.2)",
+          fontFamily: theme?.config ? "var(--filler-font)" : undefined
+        }}
+      >
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
           <RiRamLine className="h-12 w-12 text-muted-foreground/20" />
         </div>
-        <div className="text-center">
+        <div className="text-center" style={{ color: theme?.config ? "var(--filler-question)" : undefined }}>
           <p className="text-sm font-semibold">No fields yet</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-sm opacity-60">
             Add fields from the left panel to start building
           </p>
         </div>
@@ -140,8 +169,26 @@ export function FieldCanvas({ formId }: { formId: string }) {
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-muted/20">
-      <div className="mx-auto w-full max-w-2xl p-6">
+    <div 
+      ref={rootRef}
+      className="flex flex-1 flex-col overflow-y-auto transition-colors relative"
+      style={{ 
+        backgroundColor: theme?.config ? "var(--filler-bg)" : "hsl(var(--muted) / 0.2)",
+        fontFamily: theme?.config ? "var(--filler-font)" : undefined
+      }}
+    >
+      {/* Background Image Overlay if Theme has one */}
+      {theme?.config && (theme.config as any).bgImage && (
+        <div 
+          className="absolute inset-0 z-0 pointer-events-none bg-cover bg-center bg-no-repeat"
+          style={{ 
+            backgroundImage: `var(--filler-bg-image)`,
+            opacity: 1 - ((theme.config as any).bgOverlayOpacity ?? 0)
+          }} 
+        />
+      )}
+      
+      <div className="mx-auto w-full max-w-2xl p-6 relative z-10">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={fields.map((f) => f._localId)} strategy={verticalListSortingStrategy}>
             <div className="flex flex-col gap-2">

@@ -9,7 +9,8 @@
     "db:seed": "pnpm --filter @repo/database seed",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "start": "dotenv -- turbo start"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

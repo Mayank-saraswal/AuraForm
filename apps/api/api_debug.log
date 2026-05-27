@@ -93,3 +93,79 @@ To prepare for this change:
 
 See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
 (Use `node --trace-warnings ...` to show where the warning was created)
+(node:3692) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:12588) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21704) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8576) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[TRPC Auth] JWT Decode Failed: {"stack":"JWEInvalid: Invalid Content Encryption Key length. Expected 512 bits, got 256 bits\n    at checkCekLength (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:27:15)\n    at decrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:206:17)\n    at flattenedDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js:126:29)\n    at async compactDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/compact/decrypt.js:15:23)\n    at async jwtDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwt/decrypt.js:5:23)\n    at async getSessionFromRequest (D:\\projects\\AuraForm\\packages\\trpc\\server\\auth.ts:79:27)\n    at async Object.createContext (D:\\projects\\AuraForm\\packages\\trpc\\server\\context.ts:26:25)\n    at async Object.createContext (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\node-http-D0T_XJ9C.cjs:201:13)\n    at async Object.create (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1884:18)\n    at async Object.resolveResponse (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1910:3)","message":"Invalid Content Encryption Key length. Expected 512 bits, got 256 bits","code":"ERR_JWE_INVALID","name":"JWEInvalid"}
+[TRPC Auth] JWT Decode Failed: {"stack":"JWEInvalid: Invalid Content Encryption Key length. Expected 512 bits, got 256 bits\n    at checkCekLength (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:27:15)\n    at decrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:206:17)\n    at flattenedDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js:126:29)\n    at async compactDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/compact/decrypt.js:15:23)\n    at async jwtDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwt/decrypt.js:5:23)\n    at async getSessionFromRequest (D:\\projects\\AuraForm\\packages\\trpc\\server\\auth.ts:79:27)\n    at async Object.createContext (D:\\projects\\AuraForm\\packages\\trpc\\server\\context.ts:26:25)\n    at async Object.createContext (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\node-http-D0T_XJ9C.cjs:201:13)\n    at async Object.create (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1884:18)\n    at async Object.resolveResponse (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1910:3)","message":"Invalid Content Encryption Key length. Expected 512 bits, got 256 bits","code":"ERR_JWE_INVALID","name":"JWEInvalid"}
+[TRPC Auth] JWT Decode Failed: {"stack":"JWEInvalid: Invalid Content Encryption Key length. Expected 512 bits, got 256 bits\n    at checkCekLength (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:27:15)\n    at decrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:206:17)\n    at flattenedDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js:126:29)\n    at async compactDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/compact/decrypt.js:15:23)\n    at async jwtDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwt/decrypt.js:5:23)\n    at async getSessionFromRequest (D:\\projects\\AuraForm\\packages\\trpc\\server\\auth.ts:79:27)\n    at async Object.createContext (D:\\projects\\AuraForm\\packages\\trpc\\server\\context.ts:26:25)\n    at async Object.createContext (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\node-http-D0T_XJ9C.cjs:201:13)\n    at async Object.create (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1884:18)\n    at async Object.resolveResponse (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1910:3)","message":"Invalid Content Encryption Key length. Expected 512 bits, got 256 bits","code":"ERR_JWE_INVALID","name":"JWEInvalid"}
+[TRPC Auth] JWT Decode Failed: {"stack":"JWEInvalid: Invalid Content Encryption Key length. Expected 512 bits, got 256 bits\n    at checkCekLength (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:27:15)\n    at decrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/lib/content_encryption.js:206:17)\n    at flattenedDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/flattened/decrypt.js:126:29)\n    at async compactDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwe/compact/decrypt.js:15:23)\n    at async jwtDecrypt (file:///D:/projects/AuraForm/node_modules/.pnpm/jose@6.2.3/node_modules/jose/dist/webapi/jwt/decrypt.js:5:23)\n    at async getSessionFromRequest (D:\\projects\\AuraForm\\packages\\trpc\\server\\auth.ts:79:27)\n    at async Object.createContext (D:\\projects\\AuraForm\\packages\\trpc\\server\\context.ts:26:25)\n    at async Object.createContext (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\node-http-D0T_XJ9C.cjs:201:13)\n    at async Object.create (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1884:18)\n    at async Object.resolveResponse (D:\\projects\\AuraForm\\node_modules\\.pnpm\\@trpc+server@11.8.1_typescript@5.9.3\\node_modules\\@trpc\\server\\dist\\resolveResponse-ByfQ6olt.cjs:1910:3)","message":"Invalid Content Encryption Key length. Expected 512 bits, got 256 bits","code":"ERR_JWE_INVALID","name":"JWEInvalid"}
+(node:28712) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27212) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:42528) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21976) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)

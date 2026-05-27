@@ -16,7 +16,7 @@ import crypto from "node:crypto";
 
 function hashIp(ip: string): string {
   // Hash IP with a server-side salt — never store raw IPs
-  const salt = process.env["IP_HASH_SALT"] ?? "formcraft-ip-salt";
+  const salt = process.env["IP_HASH_SALT"] ?? "auraform-ip-salt";
   return crypto.createHmac("sha256", salt).update(ip).digest("hex");
 }
 

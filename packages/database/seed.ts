@@ -21,7 +21,7 @@ async function cleanDatabase() {
   await db.delete(schema.formThemesTable);
   // Keep users — just delete the demo user
   await db.delete(schema.usersTable)
-    .where(eq(schema.usersTable.email, "demo@formcraft.app"));
+    .where(eq(schema.usersTable.email, "demo@auraform.app"));
   console.log("Database cleaned.\n");
 }
 
@@ -181,7 +181,7 @@ const THEMES = [
 
 // ── Main seed function ────────────────────────────────────────────────────────
 async function seed() {
-  console.log("Starting FormCraft seed...\n");
+  console.log("Starting AuraForm seed...\n");
 
   // Clean existing seed data first
   await cleanDatabase();
@@ -219,18 +219,18 @@ async function seed() {
   await db.insert(schema.usersTable).values({
     id:            demoUserId,
     name:      "Demo Creator",
-    email:         "demo@formcraft.app",
+    email:         "demo@auraform.app",
     emailVerified: true,
     passwordHash,
     plan:          "pro",
   }).onConflictDoNothing();
 
   const demoUser = await db.query.usersTable.findFirst({
-    where: eq(schema.usersTable.email, "demo@formcraft.app"),
+    where: eq(schema.usersTable.email, "demo@auraform.app"),
     columns: { id: true, name: true },
   });
   const userId = demoUser!.id;
-  console.log(`  Demo user ready: demo@formcraft.app / Demo1234!\n`);
+  console.log(`  Demo user ready: demo@auraform.app / Demo1234!\n`);
 
   // ── 3. Seed 5 themed forms ──────────────────────────────────────────────────
   console.log("Seeding forms...");
@@ -251,7 +251,7 @@ async function seed() {
 
   console.log("Seed complete! Open http://localhost:3000 to see it.\n");
   console.log("Demo credentials:");
-  console.log("  Email:    demo@formcraft.app");
+  console.log("  Email:    demo@auraform.app");
   console.log("  Password: Demo1234!\n");
 
   process.exit(0);
@@ -497,21 +497,21 @@ async function seedAllForms(
   // ── Form 4: Startup Idea Validator (unlisted) ──────────────────────────────
   const form4 = await createForm({
     userId,
-    title:        "Startup Idea Validator — FormCraft v2 Features",
-    description:  "Help us prioritise what to build next in FormCraft. Takes 3 minutes.",
-    slug:         "formcraft-feature-vote",
+    title:        "Startup Idea Validator — AuraForm v2 Features",
+    description:  "Help us prioritise what to build next in AuraForm. Takes 3 minutes.",
+    slug:         "auraform-feature-vote",
     themeId:      themeIdMap["startup"]!,
     visibility:   "unlisted",
     viewCount:    88,
     responseCount: 0,
     thankYouTitle:   "Your input is gold.",
-    thankYouMessage: "We read every response. Thank you for helping shape FormCraft.",
+    thankYouMessage: "We read every response. Thank you for helping shape AuraForm.",
   });
 
   const f4Fields = await createFields(form4.id, [
     {
       type: "single_select",
-      label: "Which upcoming FormCraft feature excites you most?",
+      label: "Which upcoming AuraForm feature excites you most?",
       required: true, order: 0,
       options: [
         { id: uuid(), label: "Conditional logic between questions",   value: "conditional",  order: 0 },
@@ -524,7 +524,7 @@ async function seedAllForms(
       ],
     },
     {
-      type: "rating", label: "How would you rate FormCraft's current form builder experience?",
+      type: "rating", label: "How would you rate AuraForm's current form builder experience?",
       required: true, order: 1,
     },
     {
@@ -535,14 +535,14 @@ async function seedAllForms(
     },
     {
       type: "single_select",
-      label: "Which Typeform feature do you miss most in FormCraft?",
+      label: "Which Typeform feature do you miss most in AuraForm?",
       required: false, order: 3,
       options: [
         { id: uuid(), label: "Hidden fields",        value: "hidden",      order: 0 },
         { id: uuid(), label: "Custom thank-you page",value: "thankyou",    order: 1 },
         { id: uuid(), label: "Payment collection",   value: "payment",     order: 2 },
         { id: uuid(), label: "Calculator fields",    value: "calculator",  order: 3 },
-        { id: uuid(), label: "None — FormCraft is better", value: "none", order: 4 },
+        { id: uuid(), label: "None — AuraForm is better", value: "none", order: 4 },
       ],
     },
     {

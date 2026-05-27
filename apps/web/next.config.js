@@ -2,6 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: ["@repo/trpc", "@repo/schemas", "@repo/database"],
+  serverExternalPackages: ["pg", "bcryptjs", "@node-rs/argon2"],
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
@@ -16,6 +17,14 @@ const nextConfig = {
           { key: "X-Robots-Tag", value: "noindex" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
         ],
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/trpc/:path*",
+        destination: "http://localhost:8000/trpc/:path*",
       },
     ];
   },

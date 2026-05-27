@@ -10,8 +10,16 @@ import type { BuilderField } from "~/stores/form-builder";
 import type { ThemeConfig } from "@repo/schemas";
 import { cn } from "~/lib/utils";
 
-export function BuilderPreview() {
-  const { fields, theme } = useFormBuilder();
+export function BuilderPreview({
+  fieldsOverride,
+  themeOverride,
+}: {
+  fieldsOverride?: BuilderField[];
+  themeOverride?: { config: unknown };
+} = {}) {
+  const store = useFormBuilder();
+  const fields = fieldsOverride ?? store.fields;
+  const theme = themeOverride ?? store.theme;
   const rootRef           = useRef<HTMLDivElement>(null);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [direction,  setDirection]  = useState(1);
@@ -81,16 +89,20 @@ export function BuilderPreview() {
         <div className="w-full max-w-2xl">
           <AnimatePresence mode="wait" custom={direction}>
             {currentField && (
-              <motion.div
-                key={currentField.id}
-                custom={direction}
-                variants={VARIANTS}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                className="flex flex-col gap-8"
-              >
+                <motion.div
+                  key={currentField.id}
+                  custom={direction}
+                  variants={VARIANTS}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  className="flex flex-col gap-8 rounded-2xl p-6 sm:p-10"
+                  style={{
+                    backgroundColor: "var(--filler-question-bg, transparent)",
+                    backdropFilter: "blur(var(--filler-question-blur, 0px))",
+                  }}
+                >
                 {/* Question number */}
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold opacity-50">{currentIdx + 1}</span>
@@ -101,12 +113,11 @@ export function BuilderPreview() {
                 </div>
 
                 {/* Question label */}
-                <h2
-                  className="filler-question text-3xl font-bold leading-snug sm:text-4xl"
+                <div
+                  className="filler-question text-3xl font-bold leading-snug sm:text-4xl prose prose-2xl dark:prose-invert max-w-none"
                   style={{ color: "var(--filler-question)" }}
-                >
-                  {currentField.label || "Untitled question"}
-                </h2>
+                  dangerouslySetInnerHTML={{ __html: currentField.label || "Untitled question" }}
+                />
 
                 {/* Field preview based on type */}
                 <PreviewFieldInput field={currentField} ratingVal={ratingVal} setRatingVal={setRatingVal} />

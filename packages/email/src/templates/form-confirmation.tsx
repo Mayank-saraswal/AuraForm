@@ -50,7 +50,7 @@ export function FormConfirmationEmail({
           <Section style={exploreSection}>
             <Text style={exploreTitle}>Enjoyed the form experience?</Text>
             <Text style={exploreDesc}>
-              FormCraft lets anyone build beautiful, Typeform-style forms with
+              AuraForm lets anyone build beautiful, Typeform-style forms with
               20+ themes — Netflix, Jaipur, Discord, Anime and more.
               Free to start, no credit card required.
             </Text>
@@ -66,7 +66,7 @@ export function FormConfirmationEmail({
           <Section>
             <Text style={footer}>
               You are receiving this confirmation because you submitted a form
-              powered by FormCraft. FormCraft does not share your data with
+              powered by AuraForm. AuraForm does not share your data with
               third parties.
             </Text>
           </Section>

@@ -11,6 +11,7 @@ import {
   getPublicFormSchema,
   paginationSchema,
   uuidParamSchema,
+  updateCustomThemeSchema,
 } from "@repo/schemas";
 import { nanoid } from "nanoid";
 import bcrypt from "bcryptjs";
@@ -66,6 +67,51 @@ export const formsRouter = router({
         .where(eq(formsTable.id, id))
         .returning();
       return updated;
+    }),
+
+  updateCustomTheme: protectedProcedure
+    .meta(openApiMeta("POST", "/forms/{id}/theme/custom", ["Forms"], true))
+    .input(updateCustomThemeSchema)
+    .mutation(async ({ ctx, input }) => {
+      const form = await db.query.formsTable.findFirst({
+        where: and(eq(formsTable.id, input.id), eq(formsTable.userId, ctx.user.id)),
+        with: { theme: true },
+      });
+      if (!form) throw new TRPCError({ code: "NOT_FOUND", message: "Form not found." });
+      if (!form.theme) throw new TRPCError({ code: "BAD_REQUEST", message: "Form has no theme." });
+
+      const newConfig = { ...(form.theme.config as object), ...input.themeConfig };
+
+      if (form.theme.isCustom) {
+        // Just update existing custom theme
+        const [updatedTheme] = await db
+          .update(formThemesTable)
+          .set({ config: newConfig })
+          .where(eq(formThemesTable.id, form.themeId!))
+          .returning();
+        return { theme: updatedTheme, form };
+      } else {
+        // Fork into a new custom theme
+        const newThemeId = crypto.randomUUID();
+        const [newTheme] = await db.insert(formThemesTable).values({
+          id: newThemeId,
+          name: "Custom Theme",
+          slug: `custom-${newThemeId}`,
+          category: "custom",
+          config: newConfig,
+          isPro: false,
+          isCustom: true,
+          createdByUserId: ctx.user.id,
+        }).returning();
+
+        // Assign new custom theme to form
+        const [updatedForm] = await db.update(formsTable)
+          .set({ themeId: newThemeId })
+          .where(eq(formsTable.id, form.id))
+          .returning();
+
+        return { theme: newTheme, form: updatedForm };
+      }
     }),
 
   publish: protectedProcedure

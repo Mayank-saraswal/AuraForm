@@ -156,9 +156,9 @@ export function FormSettingsDrawer({ formId, open, onClose }: Props) {
 
             <div className="flex items-center justify-between rounded-lg border p-3">
               <div>
-                <p className="text-sm font-medium">Show FormCraft branding</p>
+                <p className="text-sm font-medium">Show AuraForm branding</p>
                 <p className="text-xs text-muted-foreground">
-                  "Powered by FormCraft" footer on the form
+                  "Powered by AuraForm" footer on the form
                 </p>
               </div>
               <Switch

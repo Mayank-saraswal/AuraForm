@@ -1,4 +1,4 @@
-# FormCraft — Industry-grade Typeform Competitor
+# AuraForm — Industry-grade Typeform Competitor
 
 Forms that feel like an experience. Built with Next.js 15, tRPC, Drizzle ORM,
 better-auth and Razorpay. Deployed on Vercel + Railway.
@@ -9,16 +9,16 @@ better-auth and Razorpay. Deployed on Vercel + Railway.
 
 | Resource            | URL                                              |
 |---------------------|--------------------------------------------------|
-| Web application     | https://formcraft.vercel.app                     |
-| API server          | https://api.formcraft.app                        |
-| API documentation   | https://api.formcraft.app/docs                   |
-| OpenAPI JSON        | https://api.formcraft.app/openapi.json           |
+| Web application     | https://auraform.vercel.app                     |
+| API server          | https://api.auraform.app                        |
+| API documentation   | https://api.auraform.app/docs                   |
+| OpenAPI JSON        | https://api.auraform.app/openapi.json           |
 
 ### Demo credentials
 
 | Field    | Value                   |
 |----------|-------------------------|
-| Email    | `demo@formcraft.app`    |
+| Email    | `demo@auraform.app`    |
 | Password | `Demo1234!`             |
 
 ### Test payment credentials (Razorpay test mode)
@@ -31,9 +31,9 @@ better-auth and Razorpay. Deployed on Vercel + Railway.
 
 ---
 
-## What is FormCraft?
+## What is AuraForm?
 
-FormCraft is an India-first, open-source Typeform competitor that makes
+AuraForm is an India-first, open-source Typeform competitor that makes
 form-filling feel like an experience. Key differentiators:
 
 - **Cinematic themes** — 20+ themes including Netflix, WhatsApp, Pink City Jaipur,
@@ -47,7 +47,7 @@ form-filling feel like an experience. Key differentiators:
 - **QR code sharing** — every published form gets a QR code you can download
   or share via WhatsApp and Twitter
 - **CSV export** — one-click download of all responses as a spreadsheet
-- **Custom slugs** — `formcraft.app/f/your-brand-name`
+- **Custom slugs** — `auraform.app/f/your-brand-name`
 - **Email notifications** — Resend + React Email templates for creator alerts
   and respondent confirmations
 - **Rate limiting + security** — IP hashing, honeypot bot trap, HMAC-verified
@@ -82,7 +82,7 @@ form-filling feel like an experience. Key differentiators:
 ## Architecture
 
 ```
-formcraft/
+auraform/
 ├── apps/
 │   ├── api/              ← Express + tRPC backend (port 8000)
 │   │   └── src/
@@ -132,8 +132,8 @@ formcraft/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/formcraft.git
-cd formcraft
+git clone https://github.com/your-username/auraform.git
+cd auraform
 pnpm install
 ```
 
@@ -149,7 +149,7 @@ Open `.env` and fill in:
 
 ```bash
 # Database
-DATABASE_URL="postgresql://user:pass@ep-xxx.neon.tech/formcraft?sslmode=require"
+DATABASE_URL="postgresql://user:pass@ep-xxx.neon.tech/auraform?sslmode=require"
 
 # App URLs
 PORT=8000
@@ -172,7 +172,7 @@ IP_HASH_SALT="your-random-salt"
 
 # Resend
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
-RESEND_FROM_EMAIL="FormCraft <noreply@formcraft.app>"
+RESEND_FROM_EMAIL="AuraForm <noreply@auraform.app>"
 
 # Razorpay (use test keys)
 RAZORPAY_KEY_ID=rzp_test_xxxx
@@ -195,7 +195,7 @@ pnpm db:seed
 ```
 
 This creates:
-- Demo user: `demo@formcraft.app` / `Demo1234!` (Pro plan)
+- Demo user: `demo@auraform.app` / `Demo1234!` (Pro plan)
 - 13 predefined themes
 - 5 themed published forms (Netflix, Jaipur, Anime, Startup, Discord)
 - 247 realistic responses spread over the last 30 days
@@ -232,11 +232,11 @@ Open:
 
 Full interactive API documentation is available at:
 
-**https://api.formcraft.app/docs**
+**https://api.auraform.app/docs**
 
 The API follows OpenAPI 3.0 specification. The raw spec is at:
 
-**https://api.formcraft.app/openapi.json**
+**https://api.auraform.app/openapi.json**
 
 ### Key endpoints
 
@@ -265,18 +265,18 @@ The API follows OpenAPI 3.0 specification. The raw spec is at:
 All protected endpoints require a session cookie. Obtain it via:
 
 ```bash
-curl -X POST https://api.formcraft.app/auth/sign-in/email \
+curl -X POST https://api.auraform.app/auth/sign-in/email \
   -H "Content-Type: application/json" \
-  -d '{"email":"demo@formcraft.app","password":"Demo1234!"}'
+  -d '{"email":"demo@auraform.app","password":"Demo1234!"}'
 ```
 
-The response sets a `formcraft.session_token` cookie automatically.
+The response sets a `auraform.session_token` cookie automatically.
 
 ---
 
 ## Form Themes
 
-FormCraft ships with 13 built-in themes (8 free, 5 Pro-only):
+AuraForm ships with 13 built-in themes (8 free, 5 Pro-only):
 
 | Theme          | Category       | Pro |
 |----------------|----------------|-----|
@@ -327,9 +327,9 @@ This project was submitted to the tRPC Monorepo Hackathon 2024.
 - Razorpay payments
 - React Email notifications
 
-**GitHub**: https://github.com/your-username/formcraft
-**Demo**: https://formcraft.vercel.app
-**API Docs**: https://api.formcraft.app/docs
+**GitHub**: https://github.com/your-username/auraform
+**Demo**: https://auraform.vercel.app
+**API Docs**: https://api.auraform.app/docs
 
 ---
 

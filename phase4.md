@@ -1,4 +1,4 @@
-# FormCraft — Phase 4 Master Build Prompt
+# AuraForm — Phase 4 Master Build Prompt
 # Seed data, email system, API documentation, README
 # Paste into Cursor / Windsurf after Phase 3 is verified working.
 
@@ -106,7 +106,7 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
   return (
     <Html>
       <Head />
-      <Preview>Welcome to FormCraft — your form builder is ready</Preview>
+      <Preview>Welcome to AuraForm — your form builder is ready</Preview>
       <Body style={body}>
         <Container style={container}>
 
@@ -115,7 +115,7 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
             <div style={logoBox}>
               <Text style={logoText}>F</Text>
             </div>
-            <Text style={logoLabel}>FormCraft</Text>
+            <Text style={logoLabel}>AuraForm</Text>
           </Section>
 
           {/* Hero */}
@@ -181,11 +181,11 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
           <Section>
             <Text style={footer}>
               You are receiving this because you created an account at{" "}
-              <Link href="https://formcraft.app" style={link}>formcraft.app</Link>.
+              <Link href="https://auraform.app" style={link}>auraform.app</Link>.
               If you did not sign up, you can ignore this email.
             </Text>
             <Text style={footer}>
-              FormCraft · Jaipur, Rajasthan, India
+              AuraForm · Jaipur, Rajasthan, India
             </Text>
           </Section>
 
@@ -616,7 +616,7 @@ export function FormConfirmationEmail({
           <Section style={exploreSection}>
             <Text style={exploreTitle}>Enjoyed the form experience?</Text>
             <Text style={exploreDesc}>
-              FormCraft lets anyone build beautiful, Typeform-style forms with
+              AuraForm lets anyone build beautiful, Typeform-style forms with
               20+ themes — Netflix, Jaipur, Discord, Anime and more.
               Free to start, no credit card required.
             </Text>
@@ -632,7 +632,7 @@ export function FormConfirmationEmail({
           <Section>
             <Text style={footer}>
               You are receiving this confirmation because you submitted a form
-              powered by FormCraft. FormCraft does not share your data with
+              powered by AuraForm. AuraForm does not share your data with
               third parties.
             </Text>
           </Section>
@@ -729,7 +729,7 @@ function getResend(): Resend {
   return new Resend(key);
 }
 
-const FROM = process.env["RESEND_FROM_EMAIL"] ?? "FormCraft <noreply@formcraft.app>";
+const FROM = process.env["RESEND_FROM_EMAIL"] ?? "AuraForm <noreply@auraform.app>";
 const APP_URL = process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000";
 
 // ── Email senders ─────────────────────────────────────────────────────────────
@@ -749,7 +749,7 @@ export async function sendWelcomeEmail(opts: {
   await resend.emails.send({
     from:    FROM,
     to:      opts.toEmail,
-    subject: `Welcome to FormCraft, ${opts.toName}!`,
+    subject: `Welcome to AuraForm, ${opts.toName}!`,
     html,
   });
 }
@@ -1087,7 +1087,7 @@ const THEMES = [
 
 // ── Main seed function ────────────────────────────────────────────────────────
 async function seed() {
-  console.log("Starting FormCraft seed...\n");
+  console.log("Starting AuraForm seed...\n");
 
   // ── 1. Seed themes ──────────────────────────────────────────────────────────
   console.log("Seeding themes...");
@@ -1122,18 +1122,18 @@ async function seed() {
   await db.insert(schema.usersTable).values({
     id:            demoUserId,
     fullName:      "Demo Creator",
-    email:         "demo@formcraft.app",
+    email:         "demo@auraform.app",
     emailVerified: true,
     passwordHash,
     plan:          "pro",
   }).onConflictDoNothing();
 
   const demoUser = await db.query.usersTable.findFirst({
-    where: eq(schema.usersTable.email, "demo@formcraft.app"),
+    where: eq(schema.usersTable.email, "demo@auraform.app"),
     columns: { id: true, fullName: true },
   });
   const userId = demoUser!.id;
-  console.log(`  Demo user ready: demo@formcraft.app / Demo1234!\n`);
+  console.log(`  Demo user ready: demo@auraform.app / Demo1234!\n`);
 
   // ── 3. Seed 5 themed forms ──────────────────────────────────────────────────
   console.log("Seeding forms...");
@@ -1154,7 +1154,7 @@ async function seed() {
 
   console.log("Seed complete! Open http://localhost:3000 to see it.\n");
   console.log("Demo credentials:");
-  console.log("  Email:    demo@formcraft.app");
+  console.log("  Email:    demo@auraform.app");
   console.log("  Password: Demo1234!\n");
 
   process.exit(0);
@@ -1400,21 +1400,21 @@ async function seedAllForms(
   // ── Form 4: Startup Idea Validator (unlisted) ──────────────────────────────
   const form4 = await createForm({
     userId,
-    title:        "Startup Idea Validator — FormCraft v2 Features",
-    description:  "Help us prioritise what to build next in FormCraft. Takes 3 minutes.",
-    slug:         "formcraft-feature-vote",
+    title:        "Startup Idea Validator — AuraForm v2 Features",
+    description:  "Help us prioritise what to build next in AuraForm. Takes 3 minutes.",
+    slug:         "auraform-feature-vote",
     themeId:      themeIdMap["startup"]!,
     visibility:   "unlisted",
     viewCount:    88,
     responseCount: 0,
     thankYouTitle:   "Your input is gold.",
-    thankYouMessage: "We read every response. Thank you for helping shape FormCraft.",
+    thankYouMessage: "We read every response. Thank you for helping shape AuraForm.",
   });
 
   const f4Fields = await createFields(form4.id, [
     {
       type: "single_select",
-      label: "Which upcoming FormCraft feature excites you most?",
+      label: "Which upcoming AuraForm feature excites you most?",
       required: true, order: 0,
       options: [
         { id: uuid(), label: "Conditional logic between questions",   value: "conditional",  order: 0 },
@@ -1427,7 +1427,7 @@ async function seedAllForms(
       ],
     },
     {
-      type: "rating", label: "How would you rate FormCraft's current form builder experience?",
+      type: "rating", label: "How would you rate AuraForm's current form builder experience?",
       required: true, order: 1,
     },
     {
@@ -1438,14 +1438,14 @@ async function seedAllForms(
     },
     {
       type: "single_select",
-      label: "Which Typeform feature do you miss most in FormCraft?",
+      label: "Which Typeform feature do you miss most in AuraForm?",
       required: false, order: 3,
       options: [
         { id: uuid(), label: "Hidden fields",        value: "hidden",      order: 0 },
         { id: uuid(), label: "Custom thank-you page",value: "thankyou",    order: 1 },
         { id: uuid(), label: "Payment collection",   value: "payment",     order: 2 },
         { id: uuid(), label: "Calculator fields",    value: "calculator",  order: 3 },
-        { id: uuid(), label: "None — FormCraft is better", value: "none", order: 4 },
+        { id: uuid(), label: "None — AuraForm is better", value: "none", order: 4 },
       ],
     },
     {
@@ -1828,12 +1828,12 @@ Open `apps/api/src/server.ts`. Replace the `generateOpenApiDocument` call:
 
 ```typescript
 const openApiDocument = generateOpenApiDocument(serverRouter, {
-  title:       "FormCraft API",
+  title:       "AuraForm API",
   version:     "1.0.0",
   description: `
-## FormCraft — Industry-grade form builder API
+## AuraForm — Industry-grade form builder API
 
-FormCraft provides a complete REST + tRPC API for creating, managing and
+AuraForm provides a complete REST + tRPC API for creating, managing and
 analysing forms. This documentation covers all public and authenticated endpoints.
 
 ### Authentication
@@ -1845,11 +1845,11 @@ Protected endpoints require a valid session cookie obtained via the
 - **Form submission**: 20 submissions per IP per hour
 
 ### Demo credentials
-- Email: \`demo@formcraft.app\`
+- Email: \`demo@auraform.app\`
 - Password: \`Demo1234!\`
 
 ### Base URL (production)
-\`https://api.formcraft.app\`
+\`https://api.auraform.app\`
   `,
   baseUrl:     (process.env["BASE_URL"] ?? "http://localhost:8000").concat("/api"),
   docsUrl:     "/docs",
@@ -1887,7 +1887,7 @@ Protected endpoints require a valid session cookie obtained via the
     sessionCookie: {
       type: "apiKey",
       in:   "cookie",
-      name: "formcraft.session_token",
+      name: "auraform.session_token",
     },
   },
   security: [{ sessionCookie: [] }],
@@ -1904,7 +1904,7 @@ app.use(
     url:   "/openapi.json",
     theme: "saturn",
     configuration: {
-      title:      "FormCraft API Docs",
+      title:      "AuraForm API Docs",
       favicon:    "/favicon.ico",
       darkMode:   true,
       hideModels: false,
@@ -1917,9 +1917,9 @@ app.use(
         .section-hero { background: linear-gradient(135deg, #6C47FF22, #C026D322); }
       `,
       metaData: {
-        title:       "FormCraft API Documentation",
-        description: "Complete API reference for the FormCraft form builder platform",
-        ogTitle:     "FormCraft API",
+        title:       "AuraForm API Documentation",
+        description: "Complete API reference for the AuraForm form builder platform",
+        ogTitle:     "AuraForm API",
       },
     },
   })
@@ -1933,7 +1933,7 @@ app.use(
 Create `README.md` at the monorepo root. This is what judges read first.
 
 ```markdown
-# FormCraft — Industry-grade Typeform Competitor
+# AuraForm — Industry-grade Typeform Competitor
 
 Forms that feel like an experience. Built with Next.js 15, tRPC, Drizzle ORM,
 better-auth and Razorpay. Deployed on Vercel + Railway.
@@ -1944,16 +1944,16 @@ better-auth and Razorpay. Deployed on Vercel + Railway.
 
 | Resource            | URL                                              |
 |---------------------|--------------------------------------------------|
-| Web application     | https://formcraft.vercel.app                     |
-| API server          | https://api.formcraft.app                        |
-| API documentation   | https://api.formcraft.app/docs                   |
-| OpenAPI JSON        | https://api.formcraft.app/openapi.json           |
+| Web application     | https://auraform.vercel.app                     |
+| API server          | https://api.auraform.app                        |
+| API documentation   | https://api.auraform.app/docs                   |
+| OpenAPI JSON        | https://api.auraform.app/openapi.json           |
 
 ### Demo credentials
 
 | Field    | Value                   |
 |----------|-------------------------|
-| Email    | `demo@formcraft.app`    |
+| Email    | `demo@auraform.app`    |
 | Password | `Demo1234!`             |
 
 ### Test payment credentials (Razorpay test mode)
@@ -1966,9 +1966,9 @@ better-auth and Razorpay. Deployed on Vercel + Railway.
 
 ---
 
-## What is FormCraft?
+## What is AuraForm?
 
-FormCraft is an India-first, open-source Typeform competitor that makes
+AuraForm is an India-first, open-source Typeform competitor that makes
 form-filling feel like an experience. Key differentiators:
 
 - **Cinematic themes** — 20+ themes including Netflix, WhatsApp, Pink City Jaipur,
@@ -1982,7 +1982,7 @@ form-filling feel like an experience. Key differentiators:
 - **QR code sharing** — every published form gets a QR code you can download
   or share via WhatsApp and Twitter
 - **CSV export** — one-click download of all responses as a spreadsheet
-- **Custom slugs** — `formcraft.app/f/your-brand-name`
+- **Custom slugs** — `auraform.app/f/your-brand-name`
 - **Email notifications** — Resend + React Email templates for creator alerts
   and respondent confirmations
 - **Rate limiting + security** — IP hashing, honeypot bot trap, HMAC-verified
@@ -2017,7 +2017,7 @@ form-filling feel like an experience. Key differentiators:
 ## Architecture
 
 ```
-formcraft/
+auraform/
 ├── apps/
 │   ├── api/              ← Express + tRPC backend (port 8000)
 │   │   └── src/
@@ -2067,8 +2067,8 @@ formcraft/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/formcraft.git
-cd formcraft
+git clone https://github.com/your-username/auraform.git
+cd auraform
 pnpm install
 ```
 
@@ -2084,7 +2084,7 @@ Open `.env` and fill in:
 
 ```bash
 # Database
-DATABASE_URL="postgresql://user:pass@ep-xxx.neon.tech/formcraft?sslmode=require"
+DATABASE_URL="postgresql://user:pass@ep-xxx.neon.tech/auraform?sslmode=require"
 
 # App URLs
 PORT=8000
@@ -2107,7 +2107,7 @@ IP_HASH_SALT="your-random-salt"
 
 # Resend
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
-RESEND_FROM_EMAIL="FormCraft <noreply@formcraft.app>"
+RESEND_FROM_EMAIL="AuraForm <noreply@auraform.app>"
 
 # Razorpay (use test keys)
 RAZORPAY_KEY_ID=rzp_test_xxxx
@@ -2130,7 +2130,7 @@ pnpm db:seed
 ```
 
 This creates:
-- Demo user: `demo@formcraft.app` / `Demo1234!` (Pro plan)
+- Demo user: `demo@auraform.app` / `Demo1234!` (Pro plan)
 - 13 predefined themes
 - 5 themed published forms (Netflix, Jaipur, Anime, Startup, Discord)
 - 247 realistic responses spread over the last 30 days
@@ -2167,11 +2167,11 @@ Open:
 
 Full interactive API documentation is available at:
 
-**https://api.formcraft.app/docs**
+**https://api.auraform.app/docs**
 
 The API follows OpenAPI 3.0 specification. The raw spec is at:
 
-**https://api.formcraft.app/openapi.json**
+**https://api.auraform.app/openapi.json**
 
 ### Key endpoints
 
@@ -2200,18 +2200,18 @@ The API follows OpenAPI 3.0 specification. The raw spec is at:
 All protected endpoints require a session cookie. Obtain it via:
 
 ```bash
-curl -X POST https://api.formcraft.app/auth/sign-in/email \
+curl -X POST https://api.auraform.app/auth/sign-in/email \
   -H "Content-Type: application/json" \
-  -d '{"email":"demo@formcraft.app","password":"Demo1234!"}'
+  -d '{"email":"demo@auraform.app","password":"Demo1234!"}'
 ```
 
-The response sets a `formcraft.session_token` cookie automatically.
+The response sets a `auraform.session_token` cookie automatically.
 
 ---
 
 ## Form Themes
 
-FormCraft ships with 13 built-in themes (8 free, 5 Pro-only):
+AuraForm ships with 13 built-in themes (8 free, 5 Pro-only):
 
 | Theme          | Category       | Pro |
 |----------------|----------------|-----|
@@ -2262,9 +2262,9 @@ This project was submitted to the tRPC Monorepo Hackathon 2024.
 - Razorpay payments
 - React Email notifications
 
-**GitHub**: https://github.com/your-username/formcraft
-**Demo**: https://formcraft.vercel.app
-**API Docs**: https://api.formcraft.app/docs
+**GitHub**: https://github.com/your-username/auraform
+**Demo**: https://auraform.vercel.app
+**API Docs**: https://api.auraform.app/docs
 
 ---
 
@@ -2281,7 +2281,7 @@ Create `.env.example` at the monorepo root:
 
 ```bash
 # ── Database ──────────────────────────────────────────────────────────────────
-DATABASE_URL="postgresql://user:password@ep-example.neon.tech/formcraft?sslmode=require"
+DATABASE_URL="postgresql://user:password@ep-example.neon.tech/auraform?sslmode=require"
 
 # ── Application URLs ──────────────────────────────────────────────────────────
 PORT=8000
@@ -2308,7 +2308,7 @@ IP_HASH_SALT="change-this-to-a-random-salt"
 # ── Resend (email) ────────────────────────────────────────────────────────────
 # Get from: resend.com → API Keys (free tier: 3000 emails/month)
 RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-RESEND_FROM_EMAIL="FormCraft <noreply@yourdomain.com>"
+RESEND_FROM_EMAIL="AuraForm <noreply@yourdomain.com>"
 
 # ── Razorpay (payments) ───────────────────────────────────────────────────────
 # Get from: dashboard.razorpay.com → Settings → API Keys (use TEST keys locally)
@@ -2331,12 +2331,12 @@ pnpm install
 pnpm db:seed
 # Expected output:
 #   13 themes seeded.
-#   Demo user ready: demo@formcraft.app / Demo1234!
+#   Demo user ready: demo@auraform.app / Demo1234!
 #   5 forms seeded.
 #   89 responses for "Netflix Watchlist Survey"
 #   61 responses for "Pink City Jaipur — Visitor Experience"
 #   134 responses for "Anime Character Popularity Poll 2024"
-#   42 responses for "Startup Idea Validator — FormCraft v2 Features"
+#   42 responses for "Startup Idea Validator — AuraForm v2 Features"
 #   97 responses for "Gaming Community — Server Feedback Survey"
 #   Total responses seeded: 423
 
@@ -2345,7 +2345,7 @@ pnpm dev
 
 # 4. Verify demo login works
 #    http://localhost:3000/auth/login
-#    Email: demo@formcraft.app  Password: Demo1234!
+#    Email: demo@auraform.app  Password: Demo1234!
 
 # 5. Verify explore page shows 4 public forms
 #    http://localhost:3000/explore

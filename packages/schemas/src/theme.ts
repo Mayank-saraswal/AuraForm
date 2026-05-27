@@ -34,6 +34,8 @@ export const themeConfigSchema = z.object({
   thankYouAnimation: z.enum(["confetti", "fireworks", "checkmark", "minimal"]).default("confetti"),
   logoUrl: z.string().url().optional().nullable(),
   customCss: z.string().max(5000, "Custom CSS too large").optional().nullable(),
+  questionBgColor: z.string().regex(/^(#[0-9a-fA-F]{6}|rgba?\([^)]+\))$/).optional().nullable(),
+  questionBackdropBlur: z.string().optional().nullable(),
 });
 
 export type ThemeConfig = z.infer<typeof themeConfigSchema>;
@@ -194,6 +196,47 @@ export const PREDEFINED_THEMES = [
       questionColor: "#FFFFFF", fontFamily: "space-grotesk", buttonStyle: "square",
       progressStyle: "bar", progressColor: "#FF00FF", questionAnimation: "pop",
       thankYouAnimation: "fireworks", bgOverlayOpacity: 0,
+    },
+  },
+  {
+    slug: "jaipur-corporate",
+    name: "Jaipur Corporate",
+    category: "professional",
+    isPro: false,
+    config: {
+      bgColor: "#8B1A4A", accentColor: "#F7A8C4", textColor: "#FFFFFF",
+      questionColor: "#FFE4EF", fontFamily: "playfair-display", buttonStyle: "rounded",
+      progressStyle: "bar", progressColor: "#F7A8C4", questionAnimation: "fade",
+      thankYouAnimation: "confetti", bgOverlayOpacity: 0.6,
+      bgImage: "https://i.pinimg.com/736x/1e/fc/b6/1efcb69b698f8956f71d19a51044d77d.jpg",
+    },
+  },
+  {
+    slug: "amer-fort",
+    name: "Amer Fort",
+    category: "culture",
+    isPro: false,
+    config: {
+      bgColor: "#C47242", accentColor: "#FDE6D8", textColor: "#FFFFFF",
+      questionColor: "#FDF2E9", fontFamily: "playfair-display", buttonStyle: "rounded",
+      progressStyle: "bar", progressColor: "#FDE6D8", questionAnimation: "fade",
+      thankYouAnimation: "confetti", bgOverlayOpacity: 0.5,
+      bgImage: "https://i.pinimg.com/736x/68/2f/eb/682febeb9b84e2a125dc0cbd67fff674.jpg",
+    },
+  },
+  {
+    slug: "liquid-glass",
+    name: "Liquid Glass",
+    category: "cinematic",
+    isPro: true,
+    config: {
+      bgColor: "#0f172a", accentColor: "#38bdf8", textColor: "#ffffff",
+      questionColor: "#ffffff", fontFamily: "inter", buttonStyle: "rounded",
+      progressStyle: "bar", progressColor: "#38bdf8", questionAnimation: "fade",
+      thankYouAnimation: "confetti", bgOverlayOpacity: 0.2,
+      bgImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+      questionBgColor: "rgba(255, 255, 255, 0.05)",
+      questionBackdropBlur: "12px",
     },
   },
 ] as const;

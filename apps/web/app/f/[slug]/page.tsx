@@ -10,8 +10,8 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   return {
-    title: `Fill form — FormCraft`,
-    description: "Fill out this form created with FormCraft.",
+    title: `Fill form — AuraForm`,
+    description: "Fill out this form created with AuraForm.",
     robots: { index: false },
   };
 }

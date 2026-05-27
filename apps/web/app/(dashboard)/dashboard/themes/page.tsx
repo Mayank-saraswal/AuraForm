@@ -6,7 +6,9 @@ import toast from "react-hot-toast";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Skeleton } from "~/components/ui/skeleton";
-import { RiPaletteLine, RiCheckLine, RiArrowRightLine } from "react-icons/ri";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "~/components/ui/dialog";
+import { RiPaletteLine, RiCheckLine, RiEyeLine } from "react-icons/ri";
+import { BuilderPreview } from "~/components/builder/preview";
 
 const CATEGORIES = ["All", "Minimal", "Gradient", "Dark", "Playful", "Professional", "Cinematic"];
 
@@ -18,6 +20,12 @@ export default function ThemeGalleryPage() {
   const formId = searchParams?.get("formId");
 
   const { data: themes, isLoading } = trpc.themes.list.useQuery();
+  const { data: form } = trpc.forms.getById.useQuery(
+    { id: formId! },
+    { enabled: !!formId }
+  );
+
+  const [previewTheme, setPreviewTheme] = useState<any | null>(null);
 
   const updateFormMutation = trpc.forms.update.useMutation({
     onSuccess: () => {
@@ -119,14 +127,24 @@ export default function ThemeGalleryPage() {
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100">
                     {formId ? (
-                      <Button
-                        className="bg-primary hover:bg-primary/90"
-                        onClick={() => applyTheme(theme.id)}
-                        disabled={updateFormMutation.isPending}
-                      >
-                        {updateFormMutation.isPending ? "Applying..." : "Apply theme"}
-                        {!updateFormMutation.isPending && <RiCheckLine className="ml-2 h-4 w-4" />}
-                      </Button>
+                      <div className="flex flex-col gap-2">
+                        <Button
+                          variant="secondary"
+                          className="w-full bg-white text-black hover:bg-white/90"
+                          onClick={() => setPreviewTheme(theme)}
+                        >
+                          <RiEyeLine className="mr-2 h-4 w-4" />
+                          Live Preview
+                        </Button>
+                        <Button
+                          className="w-full bg-primary hover:bg-primary/90"
+                          onClick={() => applyTheme(theme.id)}
+                          disabled={updateFormMutation.isPending}
+                        >
+                          {updateFormMutation.isPending ? "Applying..." : "Apply directly"}
+                          {!updateFormMutation.isPending && <RiCheckLine className="ml-2 h-4 w-4" />}
+                        </Button>
+                      </div>
                     ) : (
                       <Badge className="bg-white text-black hover:bg-white/90 cursor-default px-3 py-1.5 text-sm font-medium">
                         View only
@@ -154,6 +172,45 @@ export default function ThemeGalleryPage() {
           })}
         </div>
       )}
+
+      {/* Live Preview Modal */}
+      <Dialog open={!!previewTheme} onOpenChange={(open) => !open && setPreviewTheme(null)}>
+        <DialogContent className="max-w-5xl h-[85vh] p-0 flex flex-col overflow-hidden border-0">
+          <DialogHeader className="px-6 py-4 border-b bg-card">
+            <DialogTitle>Preview: {previewTheme?.name}</DialogTitle>
+            <DialogDescription>
+              This is how your form will look with the {previewTheme?.name} theme applied.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="flex-1 overflow-hidden flex bg-muted/20 relative">
+            {form ? (
+              <BuilderPreview
+                fieldsOverride={form.fields as any}
+                themeOverride={previewTheme as any}
+              />
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground">
+                Loading form data...
+              </div>
+            )}
+          </div>
+
+          <DialogFooter className="px-6 py-4 border-t bg-card">
+            <Button variant="outline" onClick={() => setPreviewTheme(null)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (previewTheme) applyTheme(previewTheme.id);
+              }}
+              disabled={updateFormMutation.isPending}
+            >
+              {updateFormMutation.isPending ? "Applying..." : "Apply this Theme"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

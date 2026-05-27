@@ -37,11 +37,15 @@ export async function getSessionFromRequest(
       })
     );
 
-    const sessionToken =
-      cookies["__Secure-authjs.session-token"] ||
-      cookies["authjs.session-token"] ||
-      cookies["__Secure-next-auth.session-token"] ||
-      cookies["next-auth.session-token"];
+    let sessionCookieName = "";
+    if (cookies["__Secure-authjs.session-token"]) sessionCookieName = "__Secure-authjs.session-token";
+    else if (cookies["authjs.session-token"]) sessionCookieName = "authjs.session-token";
+    else if (cookies["__Secure-next-auth.session-token"]) sessionCookieName = "__Secure-next-auth.session-token";
+    else if (cookies["next-auth.session-token"]) sessionCookieName = "next-auth.session-token";
+
+    const sessionToken = cookies[sessionCookieName];
+
+    console.log("[TRPC Auth] Session Token:", sessionToken ? "Found" : "Missing", "CookieName:", sessionCookieName);
 
     if (!sessionToken) return null;
 
@@ -50,16 +54,27 @@ export async function getSessionFromRequest(
     try {
       const { jwtDecrypt } = await import("jose");
       const secret = process.env["AUTH_SECRET"] || process.env["NEXTAUTH_SECRET"];
-      if (!secret) return null;
+      if (!secret) {
+        console.log("[TRPC Auth] Secret missing");
+        return null;
+      }
 
       // NextAuth v5 derives a 256-bit key from the secret via HKDF
       const { hkdf } = await import("@panva/hkdf");
+      
+      const isV5 = sessionCookieName.includes("authjs");
+      const salt = isV5 ? sessionCookieName : "";
+      const info = isV5 
+        ? `Auth.js Generated Encryption Key (${salt})`
+        : "NextAuth.js Generated Encryption Key";
+      const keyLength = isV5 ? 64 : 32;
+
       const derivedKey = await hkdf(
         "sha256",
         secret,
-        "",
-        "Auth.js Generated Encryption Key",
-        32
+        salt,
+        info,
+        keyLength
       );
 
       const { payload } = await jwtDecrypt(sessionToken, new Uint8Array(derivedKey), {
@@ -67,12 +82,17 @@ export async function getSessionFromRequest(
       });
 
       userId = (payload.id as string) || (payload.sub as string) || null;
-    } catch {
+      console.log("[TRPC Auth] Decoded userId:", userId);
+    } catch (err) {
       // JWT decode failed — token invalid or expired
+      console.error("[TRPC Auth] JWT Decode Failed:", err);
       return null;
     }
 
-    if (!userId) return null;
+    if (!userId) {
+      console.log("[TRPC Auth] UserId missing in payload");
+      return null;
+    }
 
     // Fetch the user from database
     const [user] = await db
@@ -87,10 +107,16 @@ export async function getSessionFromRequest(
       .where(eq(usersTable.id, userId))
       .limit(1);
 
-    if (!user) return null;
+    if (!user) {
+      console.log("[TRPC Auth] User not found in DB for ID:", userId);
+      return null;
+    }
 
+    console.log("[TRPC Auth] Successfully authenticated user:", user.email);
     return user;
-  } catch {
+  } catch (err) {
+    console.error("[TRPC Auth] Outer catch error:", err);
     return null;
   }
 }
+  

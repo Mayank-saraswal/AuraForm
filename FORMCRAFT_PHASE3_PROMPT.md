@@ -1,4 +1,4 @@
-# FormCraft — Phase 3 Master Build Prompt
+# AuraForm — Phase 3 Master Build Prompt
 # Complete the builder, forms list, theme gallery, QR sharing, CSV export, form settings
 # Paste into Cursor / Windsurf after Phase 2 is verified working.
 
@@ -1555,9 +1555,9 @@ export function FormSettingsDrawer({ formId, open, onClose }: Props) {
 
             <div className="flex items-center justify-between rounded-lg border p-3">
               <div>
-                <p className="text-sm font-medium">Show FormCraft branding</p>
+                <p className="text-sm font-medium">Show AuraForm branding</p>
                 <p className="text-xs text-muted-foreground">
-                  "Powered by FormCraft" footer on the form
+                  "Powered by AuraForm" footer on the form
                 </p>
               </div>
               <Switch
@@ -2010,7 +2010,7 @@ import { motion } from "framer-motion";
 
 const TESTIMONIALS = [
   {
-    quote: "We replaced our Google Forms with FormCraft for all our event registrations. The Netflix theme gets a comment every single time.",
+    quote: "We replaced our Google Forms with AuraForm for all our event registrations. The Netflix theme gets a comment every single time.",
     name: "Arjun Sharma",
     role: "Event Manager, Bengaluru",
     avatar: "AS",

@@ -95,7 +95,7 @@ app.use((req, res, next) => {
 });
 
 // ── Health check ─────────────────────────────────────────────────────────────
-app.get("/", (req, res) => res.json({ message: "FormCraft API is running." }));
+app.get("/", (req, res) => res.json({ message: "AuraForm API is running." }));
 app.get("/health", (req, res) => res.json({ status: "healthy", ts: Date.now() }));
 
 // Auth is handled by NextAuth in the Next.js app (apps/web)
@@ -104,12 +104,12 @@ app.get("/health", (req, res) => res.json({ status: "healthy", ts: Date.now() })
 let openApiDocument: ReturnType<typeof generateOpenApiDocument> | null = null;
 try {
   openApiDocument = generateOpenApiDocument(serverRouter, {
-    title:       "FormCraft API",
+    title:       "AuraForm API",
     version:     "1.0.0",
     description: `
-## FormCraft — Industry-grade form builder API
+## AuraForm — Industry-grade form builder API
 
-FormCraft provides a complete REST + tRPC API for creating, managing and
+AuraForm provides a complete REST + tRPC API for creating, managing and
 analysing forms. This documentation covers all public and authenticated endpoints.
 
 ### Authentication
@@ -121,11 +121,11 @@ Protected endpoints require a valid session cookie obtained via the
 - **Form submission**: 20 submissions per IP per hour
 
 ### Demo credentials
-- Email: \`demo@formcraft.app\`
+- Email: \`demo@auraform.app\`
 - Password: \`Demo1234!\`
 
 ### Base URL (production)
-\`https://api.formcraft.app\`
+\`https://api.auraform.app\`
     `,
     baseUrl:     (process.env["BASE_URL"] ?? "http://localhost:8000").concat("/api"),
     docsUrl:     "/docs",
@@ -159,7 +159,7 @@ Protected endpoints require a valid session cookie obtained via the
       sessionCookie: {
         type: "apiKey",
         in:   "cookie",
-        name: "formcraft.session_token",
+        name: "auraform.session_token",
       },
     },
     
@@ -186,9 +186,9 @@ if (openApiDocument) {
         .section-hero { background: linear-gradient(135deg, #6C47FF22, #C026D322); }
       `,
       metaData: {
-        title:       "FormCraft API Documentation",
-        description: "Complete API reference for the FormCraft form builder platform",
-        ogTitle:     "FormCraft API",
+        title:       "AuraForm API Documentation",
+        description: "Complete API reference for the AuraForm form builder platform",
+        ogTitle:     "AuraForm API",
       },
     } as any)
   );

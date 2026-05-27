@@ -28,7 +28,7 @@ const PLANS = [
       { label: "CSV export",                  included: true },
       { label: "Custom URL slug",             included: false },
       { label: "QR code sharing",             included: false },
-      { label: "Remove FormCraft branding",   included: false },
+      { label: "Remove AuraForm branding",   included: false },
       { label: "All premium themes (20+)",    included: false },
       { label: "Password-protected forms",    included: false },
       { label: "Priority support",            included: false },
@@ -51,7 +51,7 @@ const PLANS = [
       { label: "CSV export",                  included: true },
       { label: "Custom URL slug",             included: true },
       { label: "QR code sharing",             included: true },
-      { label: "Remove FormCraft branding",   included: true },
+      { label: "Remove AuraForm branding",   included: true },
       { label: "Password-protected forms",    included: true },
       { label: "Form expiry and limits",      included: true },
       { label: "Priority email support",      included: false },
@@ -127,7 +127,7 @@ export default function PricingPage() {
         amount:           orderData.amount,
         currency:         orderData.currency,
         order_id:         orderData.orderId,
-        name:             "FormCraft",
+        name:             "AuraForm",
         description:      `${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan \u2014 ${cycle}`,
         image:            "/icon.png",
         prefill: {
@@ -147,7 +147,7 @@ export default function PricingPage() {
             plan,
             billingCycle:      cycle,
           });
-          toast.success(`Welcome to FormCraft ${plan.charAt(0).toUpperCase() + plan.slice(1)}!`);
+          toast.success(`Welcome to AuraForm ${plan.charAt(0).toUpperCase() + plan.slice(1)}!`);
           router.push("/dashboard");
         },
       });

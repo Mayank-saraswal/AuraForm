@@ -18,12 +18,12 @@ const poppins = Poppins({ weight: ["400", "500", "600"], subsets: ["latin"], var
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "FormCraft", template: "%s | FormCraft" },
+  title: { default: "AuraForm", template: "%s | AuraForm" },
   description: "Forms that feel like an experience. The modern, beautiful form builder for India.",
-  keywords: ["form builder", "typeform alternative", "survey tool", "FormCraft"],
+  keywords: ["form builder", "typeform alternative", "survey tool", "AuraForm"],
   metadataBase: new URL(process.env["NEXT_PUBLIC_APP_URL"] ?? "http://localhost:3000"),
   openGraph: {
-    title: "FormCraft",
+    title: "AuraForm",
     description: "Forms that feel like an experience.",
     type: "website",
   },

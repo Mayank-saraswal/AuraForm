@@ -34,7 +34,7 @@ const FEATURES = [
     icon: RiQrCodeLine,
     color: "#C026D3",
     title: "QR code and custom slugs",
-    desc: "formcraft.app/f/your-slug — share via QR, WhatsApp, Twitter. No ugly hash URLs.",
+    desc: "auraform.app/f/your-slug — share via QR, WhatsApp, Twitter. No ugly hash URLs.",
   },
   {
     icon: RiMailLine,

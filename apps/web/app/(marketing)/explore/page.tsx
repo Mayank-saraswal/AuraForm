@@ -41,7 +41,7 @@ export default function ExplorePage() {
             Discover public forms
           </h1>
           <p className="mt-4 text-white/50">
-            Browse forms created by the FormCraft community. Fill them out or use as inspiration.
+            Browse forms created by the AuraForm community. Fill them out or use as inspiration.
           </p>
         </div>
 

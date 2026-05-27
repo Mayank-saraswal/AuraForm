@@ -29,7 +29,7 @@ export function CTASection() {
               <span className="text-primary">people actually enjoy?</span>
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-white/60">
-              Join thousands of creators, startups, and teams using FormCraft
+              Join thousands of creators, startups, and teams using AuraForm
               to collect data beautifully. Free forever — no credit card required.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

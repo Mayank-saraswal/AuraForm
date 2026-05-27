@@ -22,6 +22,11 @@
     "db:seed": {
       "cache": false,
       "env": ["DATABASE_URL"]
+    },
+    "start": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
     }
   }
 }

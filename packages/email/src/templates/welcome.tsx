@@ -14,7 +14,7 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
   return (
     <Html>
       <Head />
-      <Preview>Welcome to FormCraft — your form builder is ready</Preview>
+      <Preview>Welcome to AuraForm — your form builder is ready</Preview>
       <Body style={body}>
         <Container style={container}>
 
@@ -23,7 +23,7 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
             <div style={logoBox}>
               <Text style={logoText}>F</Text>
             </div>
-            <Text style={logoLabel}>FormCraft</Text>
+            <Text style={logoLabel}>AuraForm</Text>
           </Section>
 
           {/* Hero */}
@@ -89,11 +89,11 @@ export function WelcomeEmail({ userName, userEmail, dashboardUrl }: WelcomeEmail
           <Section>
             <Text style={footer}>
               You are receiving this because you created an account at{" "}
-              <Link href="https://formcraft.app" style={link}>formcraft.app</Link>.
+              <Link href="https://auraform.app" style={link}>auraform.app</Link>.
               If you did not sign up, you can ignore this email.
             </Text>
             <Text style={footer}>
-              FormCraft · Jaipur, Rajasthan, India
+              AuraForm · Jaipur, Rajasthan, India
             </Text>
           </Section>
 
